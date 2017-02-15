@@ -5,11 +5,11 @@
 #tmv=${1:-"3600"}
 tmv=${1:-"600"}
 did=${2:-"emulator-5554"}
-OUTDIR=/home/hcai/testbed/malwareLogs_firstrep
+OUTDIR=/home/hcai/testbed/singleAppLogs_benign_set3_highcov_10m
 mkdir -p $OUTDIR
 
-destdir=/home/hcai/testbed/cg.instrumented/malware/
-finaldir=$destdir/installed
+destdir=/home/hcai/testbed/cg.instrumented/pairs/
+finaldir=$destdir/installed/highcov/
 
 timeout() {
 
@@ -35,18 +35,17 @@ do
 		echo "$fnapk has been processed already, skipped."
 		continue
 	fi
-	srt=`cat lowcov_malware_apks | awk '{print $1}' | grep -a -c "^${fnapk##*/}$"`
-	if [ $srt -ge 1 ];then
-		# skip low-coverage apps
-		continue
-	fi
+
+	srt=`cat lowcov_benign_set3_apks | awk '{print $1}' | grep -a -c "^${fnapk##*/}$"`
+	if [ $srt -ge 1 ];then continue; fi
+
 	/home/hcai/testbed/setupEmu.sh Galaxy-Nexus-23 $did
 	apkinstall $fnapk $did
 	adb -s $did logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${fnapk##*/}.logcat &
 	tgtp=`~/bin/getpackage.sh $fnapk | awk '{print $2}'`
 	timeout $tmv "adb -s $did shell monkey -p $tgtp --ignore-crashes --ignore-timeouts --ignore-security-exceptions --throttle 200 10000000 >$OUTDIR/${fnapk##*/}.monkey"
 	killall -9 adb
-	#killall -9 emulator64-x86 adb
+	#killall -9 emulator64-x86
 done
 
 exit 0

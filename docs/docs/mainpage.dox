@@ -46,7 +46,7 @@ inter-app ICCs that can be easily exercised with random inputs. We list the pack
 inter-app ICC statistics.
 
 - <a href="validpairs.html"> View benchmark suite statistics </a><br>
-- <a href="benchapks.tar.gz"> Download benchmark suite (APKs) </a><br>
+- <a href="benchapks.tar.gz"> Download benchmark suite (APKs) </a> (These apps themselves are too large combined to be hosted here. If you would like to get them, please email the author.)
 - <b>Usage of this benchmark suite</b>
 	- These app pairs can be used as experimental subjects in <i>inter-app</i> static/dynamic analyses. 
 	- Each pair has been identified through static ICC analysis to potentially communicate with each other 

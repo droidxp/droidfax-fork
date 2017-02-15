@@ -2,10 +2,8 @@
 
 #(test $# -lt 1) && (echo "too few arguments") && exit 0
 
-#tmv=${1:-"3600"}
-tmv=${1:-"600"}
-#destdir=/home/hcai/testbed/cg.instrumented/pairs/
-destdir=/home/hcai/testbed/cg.instrumented/pairs.secondset/
+tmv=${1:-"3600"}
+destdir=/home/hcai/testbed/cov.instrumented/pairs/
 
 timeout() {
 
@@ -29,7 +27,7 @@ runOneApk() {
 	e=$3
 	
 	finaldir=$destdir/${cat}_installed
-	OUTDIR=/home/hcai/testbed/singleAppLogsNew_10m_${cat}
+	OUTDIR=/home/hcai/testbed/covLogs_singleapp_${cat}
 	mkdir -p $OUTDIR
 
 	if [ ! -s $finaldir/$i/${e}.apk ];then return; fi
@@ -38,12 +36,9 @@ runOneApk() {
 		return
 	fi
 
-	srt=`cat lowcov_benign_set2.${cat}.final | awk '{print $1}' | grep -a -c -E "^${i}-${e}.logcat$"`
-	if [ $srt -ge 1 ];then return; fi
-
 	/home/hcai/testbed/setupEmu.sh Galaxy-Nexus-23
 	apkinstall $finaldir/$i/${e}.apk
-	adb logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${i}-${e}.logcat 2>&1 &
+	adb logcat -v raw -s "hcai-cov-monitor" &>$OUTDIR/${i}-${e}.logcat 2>&1 &
 	tgtp=`~/bin/getpackage.sh $finaldir/$i/${e}.apk | awk '{print $2}'`
 	timeout $tmv "adb shell monkey -p $tgtp --ignore-crashes --ignore-timeouts --ignore-security-exceptions --throttle 200 10000000 >$OUTDIR/${i}-${e}.monkey"
 	killall -9 adb
@@ -51,7 +46,7 @@ runOneApk() {
 
 runPairs() {
 	cat=$1
-	for ((i=1;i<=100;i++))
+	for ((i=1;i<=250;i++))
 	do
 		echo "================ RUN INDIVIDUAL APPS IN PAIR $i ==========================="
 		runOneApk $cat $i "s"

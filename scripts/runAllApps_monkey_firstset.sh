@@ -5,7 +5,7 @@
 #tmv=${1:-"3600"}
 tmv=${1:-"600"}
 #destdir=/home/hcai/testbed/cg.instrumented/pairs/
-destdir=/home/hcai/testbed/cg.instrumented/pairs.secondset/
+destdir=/home/hcai/testbed/cg.instrumented/pairs.firstset/
 
 timeout() {
 
@@ -29,7 +29,7 @@ runOneApk() {
 	e=$3
 	
 	finaldir=$destdir/${cat}_installed
-	OUTDIR=/home/hcai/testbed/singleAppLogsNew_10m_${cat}
+	OUTDIR=/home/hcai/testbed/singleAppLogs_10m_${cat}
 	mkdir -p $OUTDIR
 
 	if [ ! -s $finaldir/$i/${e}.apk ];then return; fi
@@ -38,8 +38,8 @@ runOneApk() {
 		return
 	fi
 
-	srt=`cat lowcov_benign_set2.${cat}.final | awk '{print $1}' | grep -a -c -E "^${i}-${e}.logcat$"`
-	if [ $srt -ge 1 ];then return; fi
+	srt=`cat lowcov_benign_set1.${cat}.final | awk '{print $1}' | grep -a -c "^${i}-${e}.logcat$"`
+	if [ $srt -ge 1 ];then continue; fi
 
 	/home/hcai/testbed/setupEmu.sh Galaxy-Nexus-23
 	apkinstall $finaldir/$i/${e}.apk
@@ -51,7 +51,7 @@ runOneApk() {
 
 runPairs() {
 	cat=$1
-	for ((i=1;i<=100;i++))
+	for ((i=1;i<=54;i++))
 	do
 		echo "================ RUN INDIVIDUAL APPS IN PAIR $i ==========================="
 		runOneApk $cat $i "s"
