@@ -73,7 +73,7 @@ public class rankReport extends securityReport { //implements Extension {
 	    {
 	        public int compare( Map.Entry<K, V> o1, Map.Entry<K, V> o2 )
 	        {
-	            return (o1.getValue()).compareTo( o2.getValue() );
+	            return -(o1.getValue()).compareTo( o2.getValue() );
 	        }
 	    } );
 	
@@ -100,7 +100,7 @@ public class rankReport extends securityReport { //implements Extension {
 	    {
 	        public int compare( Map.Entry<K, V> o1, Map.Entry<K, V> o2 )
 	        {
-	            return (o1.getValue().size() - o2.getValue().size() );
+	            return -(o1.getValue().size() - o2.getValue().size() );
 	        }
 	    } );
 	
