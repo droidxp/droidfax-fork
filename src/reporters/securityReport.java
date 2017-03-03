@@ -873,7 +873,7 @@ public class securityReport implements Extension {
 				allEscapeSrcInCalls + "\t" + allReachableSinkInCalls);				
 	}
 	
-	static String percentage(int a, int b) {
+	public static String percentage(int a, int b) {
 		DecimalFormat df = new DecimalFormat("#.####");
 		if (b==0) return df.format(0); 
 		return df.format(a*1.0/b);
