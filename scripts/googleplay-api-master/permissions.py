@@ -25,6 +25,7 @@ api.login(GOOGLE_LOGIN, GOOGLE_PASSWORD, AUTH_TOKEN)
 if (len(packagenames) == 1):
     response = api.details(packagenames[0])
     print "\n".join(i.encode('utf8') for i in response.docV2.details.appDetails.permission)
+
 else: # More than one app
     response = api.bulkDetails(packagenames)
 
