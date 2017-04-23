@@ -110,6 +110,8 @@ public class Monitor {
 		try {s += "\tType=" + itn.getType()+"\n";} catch (Exception e) {}
 		try {s += "\tExtras=" + itn.getExtras()+"\n";} catch (Exception e) {}
 		try {s += "\tComponent=" + itn.getComponent()+"\n";} catch (Exception e) {}
+		
+		
 		//s += "============= End ==========="+"\n";
 		
 		android.util.Log.println(0, "hcai-intent-monitor", s);

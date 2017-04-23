@@ -5,17 +5,23 @@
  * -------------------------------------------------------------------------------------------
  * 10/19/15		hcai			Created; for monitoring method events in DynCG 
  * 10/26/15		hcai			added ICC monitoring with time-stamping call events
+ * 04/22/17		hcai		added instrumentation for tracking reflection-called method
  *
 */
 package dynCG;
 
 import iacUtil.MethodEventComparator;
 import iacUtil.logicClock;
+import iacUtil.utils;
+import soot.Scene;
+import soot.SootClass;
+import soot.Type;
 
 import java.io.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -166,19 +172,27 @@ public class Monitor {
 		}
 	}
 	
-	public synchronized static void returnInto(String methodname, String calleeName){
+	public synchronized static void returnInto(String methodname, String calleeName, java.lang.reflect.Method refme){
 		if (active) return;
 		active = true;
-		try { returnInto_impl(methodname, calleeName); }
+		try { returnInto_impl(methodname, calleeName, refme); }
 		finally { active = false; }
 	}
+	
+	
 	/* the callee could be either an actual method called or a trap */
-	public synchronized static void returnInto_impl(String methodname, String calleeName){
+	public synchronized static void returnInto_impl(String methodname, String calleeName, java.lang.reflect.Method refme){
 		//android.util.Log.e("hcai-cg-monitor", methodname + " -> " + calleeName);
 		if (dumpCallmap) {
 			int idx = calleeName.indexOf(calleeTag);
 			if (-1 != idx)  {
 				String ceName = calleeName.substring(idx+calleeTag.length()).trim();
+				if (refme!=null) {
+					android.util.Log.e("hcai-cg-monitor", "+through reflection");
+					//ceName = refme.getName();
+					//ceName = utils.getSignature(refme.getDeclaringClass(), refme.getName(), refme.getParameterTypes(), refme.getReturnType());
+					ceName = "<"+refme.getDeclaringClass().getName()+": " + refme.getReturnType().getName() + " " + refme.getName() + "()>";
+				}
 				callmap.put(methodname, ceName);
 				/*
 				try {
@@ -212,14 +226,14 @@ public class Monitor {
 		}
 	}
 	
-	public synchronized static void libCall(String methodname, String calleeName){
-		try { libCall_impl(methodname, calleeName); }
+	public synchronized static void libCall(String methodname, String calleeName, java.lang.reflect.Method refme){
+		try { libCall_impl(methodname, calleeName, refme); }
 		finally { }
 	}
-	public synchronized static void libCall_impl(String methodname, String calleeName) {
+	public synchronized static void libCall_impl(String methodname, String calleeName, java.lang.reflect.Method refme) {
 		try {
 			enter(calleeName);
-			returnInto(methodname, calleeName);
+			returnInto(methodname, calleeName, refme);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

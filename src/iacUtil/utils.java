@@ -32,6 +32,7 @@ import java.util.Random;
 import java.util.Set;
 
 import dua.method.CFGDefUses.Variable;
+import dua.method.CallSite;
 import dua.util.Pair;
 import dua.util.Util;
 import fault.StmtMapper;
@@ -44,7 +45,10 @@ import soot.jimple.Constant;
 import soot.jimple.FieldRef;
 import soot.jimple.IdentityStmt;
 import soot.jimple.InstanceFieldRef;
+import soot.jimple.InstanceInvokeExpr;
 import soot.jimple.IntConstant;
+import soot.jimple.InvokeExpr;
+import soot.jimple.InvokeStmt;
 import soot.jimple.Jimple;
 import soot.jimple.NewExpr;
 import soot.jimple.ReturnStmt;
@@ -624,6 +628,70 @@ public class utils {
 	    }
 	    return result;
 	}
+	
+	public static Boolean isReflectionCall(CallSite cs, SootMethod ce)
+	{
+		Stmt csstmt=cs.getLoc().getStmt();
+		if (csstmt.containsInvokeExpr() && ce.getDeclaringClass().getName().compareToIgnoreCase("java.lang.reflect.Method")==0 &&
+				ce.getName().compareToIgnoreCase("invoke")==0) {
+			/*
+			if (! (csstmt instanceof InvokeStmt)) {
+				System.err.println(csstmt + " Is not a invoke statement...");
+				System.exit(-1);
+			}
+			assert csstmt instanceof InvokeStmt;
+			InvokeStmt csinv = (InvokeStmt)csstmt;
+			*/
+			InvokeExpr invexp = csstmt.getInvokeExpr();
+			assert invexp instanceof InstanceInvokeExpr;
+			InstanceInvokeExpr insinvexp = (InstanceInvokeExpr)invexp;
+			if (insinvexp.getBase().getType().equals(Scene.v().getRefType("java.lang.reflect.Method"))) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static Value getReflectionCallBase(CallSite cs, SootMethod ce)
+	{
+		if (isReflectionCall(cs, ce)==false) return null;
+		return ((InstanceInvokeExpr)cs.getLoc().getStmt().getInvokeExpr()).getBase();
+	}
+	
+	 private static String getSubSignatureImpl(
+		        String name,
+		        Class<?>[] params,
+		        Class<?> returnType) {
+		        StringBuilder buffer = new StringBuilder();
+		        Class<?> t = returnType;
+
+		        buffer.append(t.getName());
+		        buffer.append(" ");
+		        buffer.append(Scene.v().quotedNameOf(name));
+		        buffer.append("(");
+		        
+		        for (int i = 0; i < params.length; i++) {
+		            buffer.append(params[i].getName());
+		            if (i < params.length - 1)
+		                buffer.append(",");
+		        }
+		        buffer.append(")");
+
+		        return buffer.toString().intern();
+		    }
+	 public static String getSignature(Class<?> cl, String name, Class<?>[] params, Class<?> returnType) {
+	        StringBuilder buffer = new StringBuilder();
+	        buffer.append("<");
+	        buffer.append(Scene.v().quotedNameOf(cl.getName()));
+	        buffer.append(": ");
+	        buffer.append(getSubSignatureImpl(name, params, returnType));
+	        buffer.append(">");
+
+	        // Again, memory-usage tweak depending on JDK implementation due
+	        // to Michael Pan.
+	        return buffer.toString().intern();
+	    }
+
 }
 
 /* vim :set ts=4 tw=4 tws=4 */

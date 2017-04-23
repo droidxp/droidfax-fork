@@ -230,6 +230,8 @@ public class sceneInstr implements Extension {
                         //InstrumManager.v().insertAfter(pchn, itnProbes, s);
                         InstrumManager.v().insertBeforeRedirect(pchn, itnProbes, s);
                         body.validate();
+                        
+                       
                     }
                     else if (iccAPICom.is_IntentReceivingAPI(s)) {
                     	List<Object> itnProbes = new ArrayList<Object>();

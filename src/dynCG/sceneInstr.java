@@ -7,6 +7,7 @@
  * 10/26/15		hcai		added ICC monitoring with time-stamping call events
  * 02/14/17		hcai		added the option of event tracking
  * 02/15/17		hcai		first working version with event tracking
+ * 04/22/17		hcai		added instrumentation for tracking reflection-called method 
 */
 package dynCG;
 
@@ -419,11 +420,22 @@ public class sceneInstr implements Extension {
 						 * instrument the entry event for the library call immediately before the returned-into event
 						 * to keep the current Monitor design: need pair of such events to deduce call graph edges 
 						 */
-						List<StringConstant> enterlibcallArgs = new ArrayList<StringConstant>();
+						SootMethod ce = cs.getAllCallees().get(0);
+						List<Value> enterlibcallArgs = new ArrayList<Value>();
 						assert cs.getAllCallees().size()>=1;
+						
 						enterlibcallArgs.add(StringConstant.v(meId));
 						enterlibcallArgs.add(StringConstant.v(//cs.getAllCallees().get(0).getSignature()));
-							cs.hashCode() + ": returnInto after calling " + cs.getAllCallees().get(0).getSignature()));
+							cs.hashCode() + ": returnInto after calling " + ce.getSignature()));
+						
+						// deal with reflection calls
+						if (utils.isReflectionCall(cs, ce)) {
+							enterlibcallArgs.add(utils.makeBoxedValue(sMethod, utils.getReflectionCallBase(cs, ce), retinProbes));
+						}
+						else {
+							enterlibcallArgs.add(NullConstant.v());
+						}
+						
 						Stmt sEnterLibCall = Jimple.v().newInvokeStmt( Jimple.v().newStaticInvokeExpr(
 								mLibCall.makeRef(), enterlibcallArgs ));
 						retinProbes.add(sEnterLibCall);
@@ -455,10 +467,21 @@ public class sceneInstr implements Extension {
 								cs + " in method: " + meId);
 					}
 					
-					List<StringConstant> retinArgs = new ArrayList<StringConstant>();
+					SootMethod ce = cs.getAllCallees().get(0);
+					List<Value> retinArgs = new ArrayList<Value>();
 					retinArgs.add(StringConstant.v(meId));
 					retinArgs.add(StringConstant.v(//cs.getLoc().toString()
-							cs.hashCode() + ": returnInto after calling " + cs.getAllCallees().get(0).getSignature()));
+							cs.hashCode() + ": returnInto after calling " + ce.getSignature()));
+					
+					// deal with reflection calls
+					if (utils.isReflectionCall(cs, ce)) {
+						retinArgs.add(utils.makeBoxedValue(sMethod, utils.getReflectionCallBase(cs, ce), retinProbes));
+					}
+					else {
+						retinArgs.add(NullConstant.v());
+					}
+					
+					
 					Stmt sReturnIntoCall = Jimple.v().newInvokeStmt( Jimple.v().newStaticInvokeExpr(
 							mReturnInto.makeRef(), retinArgs ));
 					retinProbes.add(sReturnIntoCall);
@@ -554,10 +577,11 @@ public class sceneInstr implements Extension {
 					}
 					
 					List<Stmt> retinProbes = new ArrayList<Stmt>();
-					List<StringConstant> retinArgs = new ArrayList<StringConstant>();
+					List<Value> retinArgs = new ArrayList<Value>();
 					retinArgs.add(StringConstant.v(meId));
 					retinArgs.add(StringConstant.v(/*trap.toString()*/
 							trap.hashCode() + ": returnInto in catch block for " + trap.getException().getName()));
+					retinArgs.add(NullConstant.v());
 					Stmt sReturnIntoCall = Jimple.v().newInvokeStmt( Jimple.v().newStaticInvokeExpr(
 							mReturnInto.makeRef(), retinArgs ));
 					retinProbes.add(sReturnIntoCall);
@@ -597,10 +621,11 @@ public class sceneInstr implements Extension {
 						 *   each of these traps to meet the requirement of instrumenting in each finally block
 						 */
 						List<Stmt> retinProbesF = new ArrayList<Stmt>();
-						List<StringConstant> retinArgsF = new ArrayList<StringConstant>();
+						List<Value> retinArgsF = new ArrayList<Value>();
 						retinArgsF.add(StringConstant.v(meId));
 						retinArgsF.add(StringConstant.v(/*trap.toString() */
 								trap.getEndUnit().hashCode() + ": returnInto in finally block for " + trap.getException().getName()));
+						retinArgsF.add(NullConstant.v());
 						Stmt sReturnIntoCallF = Jimple.v().newInvokeStmt( Jimple.v().newStaticInvokeExpr(
 								mReturnInto.makeRef(), retinArgsF ));
 						retinProbesF.add(sReturnIntoCallF);
