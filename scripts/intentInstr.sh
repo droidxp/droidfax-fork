@@ -51,14 +51,12 @@ starttime=`date +%s%N | cut -b1-13`
     #
 	#-instr3rdparty \
 	#-dumpJimple \
-cmd="java -Xmx4g -ea -cp ${MAINCP} eventTracker.sceneInstr \
+cmd="java -Xmx4g -ea -cp ${MAINCP} intentTracker.sceneInstr \
 	-w -cp $SOOTCP -p cg verbose:false,implicit-entry:true \
 	-p cg.spark verbose:false,on-fly-cg:true,rta:false \
 	-d $OUTDIR \
     -debug \
-	-catcallback /home/hcai/libs/catCallbacks.txt \
 	-instr3rdparty \
-    -instrlifecycle \
 	-process-dir $apkfile"
 
 ($cmd | tee $logout) 3>&1 1>&2 2>&3 | tee $logerr

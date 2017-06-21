@@ -1,12 +1,12 @@
 /**
- * File: src/dynCG/covInst.java
+ * File: src/covTracker/covInst.java
  * -------------------------------------------------------------------------------------------
  * Date			Author      Changes
  * -------------------------------------------------------------------------------------------
  * 06/18/16		hcai		created; for monitoring user code statement coverage
  * 06/19/16		hcai		reached the working version
 */
-package dynCG;
+package covTracker;
 
 import iacUtil.*;
 
@@ -61,7 +61,7 @@ public class covInstr implements Extension {
 		soot.options.Options.v().set_keep_line_number(true);
 		
 		Scene.v().addBasicClass("com.ironsource.mobilcore.BaseFlowBasedAdUnit",SootClass.SIGNATURES);
-		Scene.v().addBasicClass("dynCG.covMonitor");
+		Scene.v().addBasicClass("covTracker.covMonitor");
 		
 		
 		Forensics.registerExtension(icgins);
@@ -87,7 +87,7 @@ public class covInstr implements Extension {
 	 * Descendants may want to use customized event monitors
 	 */
 	protected void init() {
-		clsMonitor = Scene.v().getSootClass("dynCG.covMonitor");
+		clsMonitor = Scene.v().getSootClass("covTracker.covMonitor");
 		clsMonitor.setApplicationClass();
 				
 		mSProbe = clsMonitor.getMethodByName("sprobe");
@@ -109,8 +109,8 @@ public class covInstr implements Extension {
 	public int getSLOC() {
 		Set<Integer> lns = new HashSet<Integer>();
 		/* traverse all classes */
-		//Iterator<SootClass> clsIt = ProgramFlowGraph.inst().getAppClasses().iterator();
 		Iterator<SootClass> clsIt = ProgramFlowGraph.inst().getUserClasses().iterator();
+		if (opts.instrall()) clsIt = ProgramFlowGraph.inst().getAppClasses().iterator(); 
 		while (clsIt.hasNext()) {
 			SootClass sClass = (SootClass) clsIt.next();
 			if ( sClass.isPhantom() ) {
@@ -210,8 +210,8 @@ public class covInstr implements Extension {
 
 		/* traverse all classes */
 		int cnt = 0, skipped=0;
-		//Iterator<SootClass> clsIt = ProgramFlowGraph.inst().getAppClasses().iterator();
 		Iterator<SootClass> clsIt = ProgramFlowGraph.inst().getUserClasses().iterator();
+		if (opts.instrall()) clsIt = ProgramFlowGraph.inst().getAppClasses().iterator(); 
 		while (clsIt.hasNext()) {
 			SootClass sClass = (SootClass) clsIt.next();
 			if ( sClass.isPhantom() ) {

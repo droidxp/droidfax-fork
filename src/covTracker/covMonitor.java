@@ -1,5 +1,5 @@
 /**
- * File: src/dynCG/covMonitor.java
+ * File: src/covTracker/covMonitor.java
  * -------------------------------------------------------------------------------------------
  * Date			Author      	Changes
  * -------------------------------------------------------------------------------------------
@@ -7,7 +7,7 @@
  * 06/19/16		hcai		reached the working version
  *
 */
-package dynCG;
+package covTracker;
 
 import java.util.HashSet;
 import java.util.Set;
