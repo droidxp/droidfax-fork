@@ -18,9 +18,6 @@
 */
 package reporters;
 
-import iacUtil.*;
-import iacUtil.iccAPICom.EVENTCAT;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,6 +57,8 @@ import soot.toolkits.graph.Block;
 import soot.toolkits.graph.BlockGraph;
 import soot.toolkits.graph.ExceptionalBlockGraph;
 import soot.util.*;
+import utils.*;
+import utils.iccAPICom.EVENTCAT;
 import soot.jimple.infoflow.android.data.AndroidMethod.*;
 
 import dynCG.*;

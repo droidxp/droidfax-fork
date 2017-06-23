@@ -8,9 +8,6 @@
 */
 package intentTracker;
 
-import iacUtil.iccAPICom;
-import iacUtil.utils;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -35,7 +32,8 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.InvokeStmt;
 import soot.jimple.Jimple;
 import soot.jimple.Stmt;
-
+import utils.iccAPICom;
+import utils.utils;
 import soot.BodyTransformer;
 import soot.PackManager;
 

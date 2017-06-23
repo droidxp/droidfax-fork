@@ -36,11 +36,10 @@ import org.jgrapht.traverse.*;
 
 import soot.Scene;
 import soot.SootClass;
-
+import utils.iccAPICom;
 import android.content.Intent;
 import dynCG.callGraph.CGEdge;
 import dynCG.callGraph.CGNode;
-import iacUtil.iccAPICom;
 
 public class traceStat {
 	

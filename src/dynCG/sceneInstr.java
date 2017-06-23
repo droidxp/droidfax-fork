@@ -11,8 +11,6 @@
 */
 package dynCG;
 
-import iacUtil.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -41,6 +39,7 @@ import soot.toolkits.graph.BlockGraph;
 import soot.toolkits.graph.ExceptionalBlockGraph;
 import soot.util.*;
 //import soot.jimple.toolkits.annotation.*;
+import utils.*;
 
 public class sceneInstr implements Extension {
 	
@@ -81,7 +80,7 @@ public class sceneInstr implements Extension {
 		Scene.v().addBasicClass("dynCG.Monitor");
 		if (opts.monitorICC()) {
 			Scene.v().addBasicClass("intentTracker.Monitor");
-			Scene.v().addBasicClass("iacUtil.logicClock");
+			Scene.v().addBasicClass("utils.logicClock");
 		}
 		
 		if (opts.monitorEvents()) {
@@ -118,9 +117,9 @@ public class sceneInstr implements Extension {
 	protected void init() {
 		clsMonitor = Scene.v().getSootClass("dynCG.Monitor");
 		clsMonitor.setApplicationClass();
-		Scene.v().getSootClass("iacUtil.MethodEventComparator").setApplicationClass();
+		Scene.v().getSootClass("utils.MethodEventComparator").setApplicationClass();
 		if (opts.monitorICC()) {
-			Scene.v().getSootClass("iacUtil.logicClock").setApplicationClass();
+			Scene.v().getSootClass("utils.logicClock").setApplicationClass();
 		}
 		
 		if (opts.monitorEvents()) {

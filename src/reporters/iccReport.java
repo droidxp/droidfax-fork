@@ -16,8 +16,6 @@
 */
 package reporters;
 
-import iacUtil.*;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -47,7 +45,7 @@ import soot.toolkits.graph.Block;
 import soot.toolkits.graph.BlockGraph;
 import soot.toolkits.graph.ExceptionalBlockGraph;
 import soot.util.*;
-
+import utils.*;
 import dynCG.*;
 import dynCG.callGraph.CGNode;
 import dynCG.traceStat.ICCIntent;

@@ -30,7 +30,8 @@ runsingle()
 	i=$1
 	x=$2
 	if [ ! -s $srcdir/${i}/$x.apk ];then return; fi
-	/home/hcai/testbed/setupEmu.sh Nexus-One-10
+	echo "Starting android emulator ......"
+	/home/hcai/testbed/setupEmu.sh Nexus-One-10 2>/dev/null 1>&2
 	apkinstall $srcdir/$i/$x.apk
 	adb logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${i}-$x.logcat &
 	tgtp=`~/bin/getpackage.sh $srcdir/$i/$x.apk | awk '{print $2}'`

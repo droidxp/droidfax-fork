@@ -8,8 +8,6 @@
 */
 package covTracker;
 
-import iacUtil.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +28,7 @@ import fault.StmtMapper;
 import soot.*;
 import soot.jimple.*;
 import soot.tagkit.Tag;
+import utils.*;
 import soot.tagkit.LineNumberTag;
 
 public class covInstr implements Extension {

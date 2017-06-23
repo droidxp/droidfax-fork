@@ -13,7 +13,7 @@ import java.util.List;
 public class Options {
 	protected boolean debugOut = false;
 	protected boolean dumpJimple = false;
-	protected boolean perfDUAF = false;	// whether going through DUAF baseline data-flow analysis before running its extension
+	protected boolean perfDUAF = true;	// whether going through DUAF baseline data-flow analysis before running its extension
 	protected boolean modelAndroidLC = false; // whether modeling android life-cycle by creating a dummy main before analysis
 	protected boolean instr3rdparty = false;
 	protected boolean debugOut() { return debugOut; }
@@ -24,7 +24,7 @@ public class Options {
 	
 	public String[] process(String[] args) {
 		//args = super.process(args);
-		
+		boolean allowPhantom = true;
 		List<String> argsFiltered = new ArrayList<String>();
 		for (int i = 0; i < args.length; ++i) {
 			String arg = args[i];
@@ -47,6 +47,9 @@ public class Options {
 			else {
 				argsFiltered.add(arg);
 			}
+		}
+		if (allowPhantom) {
+			argsFiltered.add("-allowphantom");
 		}
 		
 		String[] arrArgsFilt = new String[argsFiltered.size()];

@@ -10,8 +10,8 @@
 */
 package intentTracker;
 
-import iacUtil.logicClock;
 import android.content.Intent;
+import utils.logicClock;
 
 /**
  * runtime monitors of ICC intent resolution

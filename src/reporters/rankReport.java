@@ -7,8 +7,6 @@
 */
 package reporters;
 
-import iacUtil.iccAPICom.EVENTCAT;
-
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +21,7 @@ import dua.Forensics;
 import soot.*;
 
 import soot.jimple.infoflow.android.data.AndroidMethod.CATEGORY;
+import utils.iccAPICom.EVENTCAT;
 
 
 public class rankReport extends securityReport { //implements Extension {

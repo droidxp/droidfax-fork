@@ -31,11 +31,10 @@ import dua.Forensics;
 import dua.global.ProgramFlowGraph;
 
 import soot.*;
-
+import utils.iccAPICom;
 import dynCG.*;
 import dynCG.callGraph.CGEdge;
 import dynCG.callGraph.CGNode;
-import iacUtil.iccAPICom;
 
 public class generalReport implements Extension {
 	

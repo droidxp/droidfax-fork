@@ -31,7 +31,8 @@ do
 	if [ ! -s $srcdir/${i}/t.apk ];then continue; fi
 
 	echo "================ RUN APP PAIR $i ==========================="
-	/home/hcai/testbed/setupEmu.sh Nexus-One-10
+	echo "Starting android emulator ......"
+	/home/hcai/testbed/setupEmu.sh Nexus-One-10 2>/dev/null 1>&2
 
 	/home/hcai/testbed/singlePairInstall.sh $indir $linkage $i
 	adb logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${i}.logcat &

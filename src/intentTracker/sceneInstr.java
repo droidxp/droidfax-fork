@@ -10,9 +10,6 @@
 */
 package intentTracker;
 
-import iacUtil.utils;
-import iacUtil.iccAPICom;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,6 +31,8 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.Jimple;
 import soot.jimple.Stmt;
 import soot.jimple.StringConstant;
+import utils.iccAPICom;
+import utils.utils;
 
 public class sceneInstr implements Extension {
 	protected SootClass clsMonitor = null;

@@ -10,12 +10,12 @@
 */
 package dynCG;
 
-import iacUtil.MethodEventComparator;
-import iacUtil.logicClock;
-import iacUtil.utils;
 import soot.Scene;
 import soot.SootClass;
 import soot.Type;
+import utils.MethodEventComparator;
+import utils.logicClock;
+import utils.utils;
 
 import java.io.*;
 

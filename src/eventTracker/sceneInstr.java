@@ -8,8 +8,6 @@
 */
 package eventTracker;
 
-import iacUtil.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,12 +24,6 @@ import dua.Forensics;
 import dua.global.ProgramFlowGraph;
 import dua.method.CFG;
 import dua.method.CFG.CFGNode;
-
-
-import iacUtil.utils;
-import iacUtil.iccAPICom.EVENTCAT;
-import iacUtil.AndroidEntryPointConstants;
-import iacUtil.iccAPICom;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -50,6 +42,8 @@ import soot.Unit;
 import soot.jimple.Jimple;
 import soot.jimple.Stmt;
 import soot.jimple.StringConstant;
+import utils.*;
+import utils.iccAPICom.EVENTCAT;
 
 public class sceneInstr implements Extension {
 	protected SootClass clsMonitor = null;
