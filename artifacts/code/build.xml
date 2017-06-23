@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="droidfax">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../usr/lib/eclipse"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="droidfax.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="../../libs/axml-2.0.jar"/>
+        <pathelement location="../../libs/soot-infoflow.jar"/>
+        <pathelement location="../../libs/soot-infoflow-android.jar"/>
+        <pathelement location="../../libs/soot-trunk.jar"/>
+        <pathelement location="../../libs/slf4j-simple-1.7.5.jar"/>
+        <pathelement location="../../libs/slf4j-api-1.7.5.jar"/>
+        <pathelement location="../../libs/xmlpull_1_0_5.jar"/>
+        <pathelement location="../../Android/Sdk/platforms/android-19/android.jar"/>
+        <pathelement location="../../libs/jgrapht-ext-0.9.2-uber.jar"/>
+        <pathelement location="../../libs/duafdroid.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="droidfax.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="cgInstr-tiehelper">
+        <java classname="dynCG.sceneInstr" failonerror="true" fork="yes">
+            <jvmarg line="-Xmx4g -ea"/>
+            <arg line="-w -cp /home/hcai//workspace/duaf/bin:/home/hcai//workspace/droidfax/bin -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/Documents/ -debug -dumpJimple -brinstr:off -duainstr:off -slicectxinsens -force-android-jar /home/hcai/libs/backup/android.jar -process-dir /home/hcai/testbed/input/topapps/TieHelper.apk"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="cgInstr">
+        <java classname="dynCG.sceneInstr" failonerror="true" fork="yes">
+            <jvmarg line="-Xmx4g -ea"/>
+            <arg line="-w -cp /home/hcai//workspace/duaf/bin:/home/hcai//workspace/droidfax/bin -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/Documents/ -debug -dumpJimple -brinstr:off -duainstr:off -allowphantom -slicectxinsens -force-android-jar /home/hcai/libs/backup/android.jar -process-dir /home/hcai/testbed/input/ActivityCommunication6.apk"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="securityReport_test">
+        <java classname="reporters.securityReport" failonerror="true" fork="yes">
+            <jvmarg line="-ea -Xmx1500m"/>
+            <arg line="-w -cp /home/hcai//workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-19/android.jar -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/gitrepo/iac/scripts/cg.instrumented/ -process-dir /home/hcai/workspace/4-t.apk -trace /home/hcai/workspace/4-t.logcat -srcsink /home/hcai/libs/SourcesAndSinks.txt -callback /home/hcai/libs/AndroidCallbacks.txt"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="intent-sceneInstr">
+        <java classname="intentTracker.sceneInstr" failonerror="true" fork="yes">
+            <jvmarg line="-Xmx4g -ea"/>
+            <arg line="-w -cp /home/hcai//workspace/droidfax/bin:/home/hcai//workspace/iac/bin -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/Documents/ -debug -dumpJimple -brinstr:off -duainstr:off -allowphantom -slicectxinsens -force-android-jar /home/hcai/libs/backup/android.jar -process-dir /home/hcai/testbed/input/ActivityCommunication6.apk"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="eventInstr">
+        <java classname="eventTracker.sceneInstr" failonerror="true" fork="yes">
+            <jvmarg line="-ea -Xmx1500m"/>
+            <arg line="-w -cp /home/hcai//workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-19/android.jar -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/testbed/event.instrumented/ -catcallback /home/hcai/libs/catCallbacks.txt  -process-dir /home/hcai/workspace/4-t.apk"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="securityReport_test_cat">
+        <java classname="reporters.securityReport" failonerror="true" fork="yes">
+            <jvmarg line="-ea -Xmx1500m"/>
+            <arg line="-w -cp /home/hcai//workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-19/android.jar -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/gitrepo/iac/scripts/cg.instrumented/ -process-dir /home/hcai/workspace/4-t.apk -trace /home/hcai/workspace/4-t.logcat -catsrc /home/hcai/libs/catsources.txt -catsink /home/hcai/libs/catsinks.txt -catcallback /home/hcai/libs/catCallbacks.txt"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="interAppIccSim_test">
+        <java classname="reporters.interAppICCSim" failonerror="true" fork="yes">
+            <jvmarg line="-ea -Xmx1500m"/>
+            <arg line="-w -cp /home/hcai//workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-19/android.jar -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/gitrepo/iac/scripts/cg.instrumented/ -apkdir /home/hcai/workspace/4 -trace /home/hcai/workspace/4.logcat"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="flashlight-instr">
+        <java classname="intentTracker.sceneInstr" failonerror="true" fork="yes">
+            <jvmarg line="-Xmx4g -ea"/>
+            <arg line="-w -cp /home/hcai//workspace/duaf/bin:/home/hcai//workspace/droidfax/bin -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/Documents/ -debug -dumpJimple -brinstr:off -duainstr:off -allowphantom -slicectxinsens -force-android-jar /home/hcai/libs/backup/android.jar -process-dir /home/hcai/Documents/input/AppClude.ShakingFlashLight.apk"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="interAppICCReport_test">
+        <java classname="reporters.interAppICCReport" failonerror="true" fork="yes">
+            <jvmarg line="-ea -Xmx1500m"/>
+            <arg line="-w -cp /home/hcai//workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-19/android.jar -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /tmp -secondapk /home/hcai/workspace/4/s.apk -firstapk /home/hcai/workspace/4/t.apk -trace /home/hcai/workspace/4.logcat"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="dynCG_test1">
+        <java classname="dynCG.traceStat" failonerror="true" fork="yes">
+            <jvmarg line="-ea -Xmx1500m"/>
+            <arg line="/home/hcai/workspace/4-t.logcat"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="cgInstr-corner">
+        <java classname="dynCG.sceneInstr" failonerror="true" fork="yes">
+            <jvmarg line="-Xmx4g -ea"/>
+            <arg line="-w -cp /home/hcai//workspace/duaf/bin:/home/hcai//workspace/droidfax/bin -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/Documents/ -debug -dumpJimple -brinstr:off -duainstr:off -allowphantom -slicectxinsens -force-android-jar /home/hcai/libs/backup/android.jar -process-dir /home/hcai/testbed/input/topapps/PhotoLocker.apk"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="flashlight-bodyInstr">
+        <java classname="intentTracker.bodyInstr" failonerror="true" fork="yes">
+            <jvmarg line="-Xmx4g -ea"/>
+            <arg line="-w -cp /home/hcai//workspace/duaf/bin:/home/hcai//workspace/droidfax/bin -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/Documents/ -debug -dumpJimple -force-android-jar /home/hcai/libs/backup/android.jar -process-dir /home/hcai/Documents/input/AppClude.ShakingFlashLight.apk"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="iccReport_test">
+        <java classname="reporters.iccReport" failonerror="true" fork="yes">
+            <jvmarg line="-ea -Xmx1500m"/>
+            <arg line="-w -cp /home/hcai//workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-19/android.jar -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/gitrepo/iac/scripts/cg.instrumented/ -process-dir /home/hcai/workspace/4-t.apk -trace /home/hcai/workspace/4-t.logcat"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+    <target name="generalReport_test">
+        <java classname="reporters.generalReport" failonerror="true" fork="yes">
+            <jvmarg line="-ea -Xmx1500m"/>
+            <arg line="-w -cp /home/hcai//workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-19/android.jar -p cg verbose:false,implicit-entry:true -p cg.spark verbose:false,on-fly-cg:true,rta:false -d /home/hcai/gitrepo/iac/scripts/cg.instrumented/ -process-dir /home/hcai/workspace/4-t.apk -trace /home/hcai/workspace/4-t.logcat"/>
+            <classpath refid="droidfax.classpath"/>
+        </java>
+    </target>
+</project>
