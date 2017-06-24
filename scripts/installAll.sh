@@ -1,6 +1,6 @@
 #!/bin/bash
 
-destdir=/home/hcai/testbed/cg.instrumented/topapps
+destdir=/home/hcai/testbed/cg.instrumented/adhoc
 
 install()
 {

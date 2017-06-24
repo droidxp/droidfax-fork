@@ -1,15 +1,13 @@
 #!/bin/bash
 
-#(test $# -lt 1) && (echo "too few arguments") && exit 0
+(test $# -lt 3) && (echo "too few arguments") && exit 0
 
-tmv=${1:-"3600"}
-#OUTDIR=/home/hcai/testbed/singleAppLogs_explicit
-OUTDIR=/home/hcai/testbed/singleAppLogs_implicit
+indir=$1
+linkage=$2
+tmv=${3:-"3600"}
+srcdir=/home/hcai/testbed/cg.instrumented/$indir/pairs/${linkage}
+OUTDIR=/home/hcai/testbed/singleappTrace_$linkage
 mkdir -p $OUTDIR
-
-destdir=/home/hcai/testbed/cg.instrumented/pairs/
-finaldir=$destdir/implicit_installed
-#finaldir=$destdir/explicit_installed
 
 timeout() {
 
@@ -27,24 +25,26 @@ timeout() {
 
 }
 
-for ((i=21;i<=54;i++))
-#for ((i=1;i<=7;i++))
+runsingle()
+{
+	i=$1
+	x=$2
+	if [ ! -s $srcdir/${i}/$x.apk ];then return; fi
+	echo "Starting android emulator ......"
+	/home/hcai/testbed/setupEmu.sh Nexus-One-10 2>/dev/null 1>&2
+	apkinstall $srcdir/$i/$x.apk
+	adb logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${i}-$x.logcat &
+	tgtp=`~/bin/getpackage.sh $srcdir/$i/$x.apk | awk '{print $2}'`
+	timeout $tmv "adb shell monkey -p $tgtp --ignore-crashes --ignore-timeouts --ignore-security-exceptions --throttle 200 10000000 >$OUTDIR/${i}-$x.monkey"
+	apkuninstall $srcdir/$i/$x.apk
+	killall -9 adb
+	killall -9 adb
+}
+
+for ((i=1;i<=55;i++))
 do
-	/home/hcai/testbed/setupEmu.sh Galaxy-Nexus-23
-	apkinstall $finaldir/$i/t.apk
-	adb logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${i}-t.logcat &
-	tgtp=`~/bin/getpackage.sh $finaldir/$i/t.apk | awk '{print $2}'`
-	timeout $tmv "adb shell monkey -p $tgtp --ignore-crashes --ignore-timeouts --ignore-security-exceptions --throttle 200 10000000 >$OUTDIR/${i}-t.monkey"
-	killall adb
-
-	echo "================ RUN INDIVIDUAL APPS IN PAIR $i ==========================="
-	/home/hcai/testbed/setupEmu.sh Galaxy-Nexus-23
-	apkinstall $finaldir/$i/s.apk
-	adb logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${i}-s.logcat &
-	srcp=`~/bin/getpackage.sh $finaldir/$i/s.apk | awk '{print $2}'`
-	timeout $tmv "adb shell monkey -p $srcp --ignore-crashes --ignore-timeouts --ignore-security-exceptions --throttle 200 10000000 >$OUTDIR/${i}-s.monkey"
-	killall adb
-
+	runsingle $i s
+	runsingle $i t
 done
 
 exit 0

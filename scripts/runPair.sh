@@ -1,11 +1,12 @@
 #!/bin/bash
 
-(test $# -lt 1) && (echo "too few arguments") && exit 0
+(test $# -lt 3) && (echo "too few arguments") && exit 0
 
-pn=$1
-destdir=/home/hcai/testbed/cg.instrumented/pairs/
-#finaldir=$destdir/implicit_installed
-finaldir=$destdir/explicit_installed
+indir=$1
+linkage=$2
+pn=$3
+destdir=/home/hcai/testbed/cg.instrumented/$indir/pairs/
+finaldir=$destdir/${linkage}
 
 timeout() {
 

@@ -12,9 +12,9 @@ subjectloc=`pwd`
 
 OUTDIR=${2:-"$subjectloc/cg.instrumented/"}
 
-MAINCP="$ROOT/libs/rt.jar:$ROOT/libs/polyglot.jar:$ROOT/libs/soot-trunk.jar:$ROOT/workspace/duafdroid/bin:$ROOT/workspace/iac/bin:$ROOT/libs/java_cup.jar"
+MAINCP="$ROOT/libs/rt.jar:$ROOT/libs/polyglot.jar:$ROOT/libs/soot-trunk.jar:$ROOT/libs/duafdroid.jar:$ROOT/workspace/droidfax/bin:$ROOT/libs/java_cup.jar"
 
-SOOTCP="$ROOT/workspace/iac/bin:/home/hcai/Android/Sdk/platforms/android-21/android.jar"
+SOOTCP="$ROOT/workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-19/android.jar"
 
 for i in $ROOT/libs/*.jar;
 do
@@ -29,7 +29,7 @@ starttime=`date +%s%N | cut -b1-13`
 	#-srcsink /home/hcai/libs/SourcesAndSinks.txt \
 	#-calltree \
 	#-featuresOnly \
-java -Xmx5g -ea -cp ${MAINCP} reporters.securityReport \
+java -Xmx5g -ea -cp ${MAINCP} reporters.rankReport \
 	-w -cp $SOOTCP -p cg verbose:false,implicit-entry:true \
 	-p cg.spark verbose:false,on-fly-cg:true,rta:false \
 	-d $OUTDIR \
