@@ -9,8 +9,8 @@ Appendix: use the artifact on a different machine	6
 
 Content of this artifact package
 The dropbox artifact folder we shared is named droidfaxAE, it includes two files: artifact.zip and 
-droidfax.7z. The first includes the artifacts we intent to share publicly, and the second file holds 
-a Virtual Box VM that is used for facilitating the use/replication of our artifacts.
+VBox.zip. The first includes the artifacts we intent to share publicly, and the second file holds a 
+Virtual Box VM that is used for facilitating the use/replication of our artifacts.
 
 Once the artifact.zip file is downloaded, unpack it. Then the following structure should be seen: 
 *	code
@@ -40,7 +40,8 @@ o	page_usage.html
 o	page_resultformat.html
 o	metricdef.pdf
 *	README.PDF, README.DOC, README.txt (same content in different formats)
-Then, download the droidfax.7z file, unzip it using 7zip, the following can be seen
+Then, download the droidfax.zip file, unzip it, the following can be seen
+*	VBox
 o	droidfaxAE.vbox
 o	droidfax.vdi
 The code and data folders include the analysis code and our dataset, respectively, as already 
@@ -59,7 +60,7 @@ characterization results into those used in the research paper.
 *	The page_resultformat.html file explains each raw characterization result data file.
 *	The metricdef.pdf elaborates on the definition of each of the 122 metrics used in our 
 characterization day.
-Finally, the VM package includes the VM for VirtualBox that we created to ease the artifact 
+Finally, the VBox folder includes the VM for VirtualBox that we created to ease the artifact 
 evaluation, especially for exploring our study and reproducing part of the results presented in 
 our research paper. Specifically, two files are included in this folder: the droidfaxAE.vbox file is 
 the VirtualBox configuration/project file, and the droidfax.vdi file is the virtual disk image that 
