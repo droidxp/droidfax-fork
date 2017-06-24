@@ -15,6 +15,7 @@ scatdata=new.env()
 catdata=new.env()
 catdataIns=new.env()
 
+colwidth<-0
 for(i in 1:nrow(tdata)) {
 	mykey<-paste(tdata[i,1])
 	#if (grepl("ALL", mykey) || grepl("NO_CATEGORY", mykey)) {
@@ -33,6 +34,8 @@ for(i in 1:nrow(tdata)) {
 	scatdata[[mykey]] <- c(catdata[[mykey]], tdata[i,5])
 	catdata[[mykey]] <- c(catdata[[mykey]], tdata[i,6])
 	catdataIns[[mykey]] <- c(catdataIns[[mykey]], tdata[i,7])
+
+	colwidth<-colwidth+1
 }
 
 pches<-c(0:8)
@@ -42,7 +45,7 @@ colors<-rep("gray",20)
 #par(mar = c(1,1,1,1))
 pdf("./lifecycle-s.pdf",width=2.5,height=3.0)
 r=1
-alls<- matrix(NA, ncol=366, nrow=length(ls(scatdata)))
+alls<- matrix(NA, ncol=colwidth, nrow=length(ls(scatdata)))
 snames  <- c()
 for (key in ls(scatdata)) {
 	vdata <- scatdata[[key]]*100
@@ -64,13 +67,13 @@ points( meanalls, seq_along(meanalls), col='gold', pch=18, cex=0.5 )
 stdalls <- apply( t(alls), 2, sd )
 for (k in 1:ncol(t(alls))) {
 	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%% (%.2f%%)\n", snames[k], as.numeric(meanalls[k]), as.numeric(stdalls[k])))
+	#cat(sprintf("%s\t%.2f%% (%.2f%%)\n", snames[k], as.numeric(meanalls[k]), as.numeric(stdalls[k])))
 }
 cat("\n")
 
 pdf("./lifecycle-d.pdf",width=2.5,height=3.0)
 r=1
-alld<- matrix(NA, ncol=366, nrow=length(ls(catdata)))
+alld<- matrix(NA, ncol=colwidth, nrow=length(ls(catdata)))
 dnames  <- c()
 for (key in ls(catdata)) {
 	vdata <- catdata[[key]]*100
@@ -94,13 +97,13 @@ points( meanalld, seq_along(meanalld), col='gold', pch=18, cex=0.5 )
 stdalld <- apply( t(alld), 2, sd )
 for (k in 1:ncol(t(alld))) {
 	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%% (%.2f%%)\n", dnames[k], as.numeric(meanalld[k]), as.numeric(stdalld[k])))
+	#cat(sprintf("%s\t%.2f%% (%.2f%%)\n", dnames[k], as.numeric(meanalld[k]), as.numeric(stdalld[k])))
 }
 cat("\n")
 
 pdf("./lifecycle-dins.pdf",width=2.5,height=3.0)
 r=1
-alldIns<- matrix(NA, ncol=366, nrow=length(ls(catdataIns)))
+alldIns<- matrix(NA, ncol=colwidth, nrow=length(ls(catdataIns)))
 dnamesIns  <- c()
 for (key in ls(catdataIns)) {
 	vdata <- catdataIns[[key]]*100
@@ -124,7 +127,8 @@ points( meanalldIns, seq_along(meanalldIns), col='gold', pch=18, cex=0.5 )
 stdalldIns <- apply( t(alldIns), 2, sd )
 for (k in 1:ncol(t(alldIns))) {
 	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%% (%.2f%%)\n", dnamesIns[k], as.numeric(meanalldIns[k]), as.numeric(stdalldIns[k])))
+	#cat(sprintf("%s\t%.2f%% (%.2f%%)\n", dnamesIns[k], as.numeric(meanalldIns[k]), as.numeric(stdalldIns[k])))
+	cat(sprintf("%s\t%.2f (%.2f)\n", dnamesIns[k], as.numeric(meanalldIns[k])/100, as.numeric(stdalldIns[k])/100))
 }
 cat("\n")
 
