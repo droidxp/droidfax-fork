@@ -69,7 +69,8 @@ actually holds the entire VM OS.
 To load the VM (called droidfaxAE), please first install VirtualBox 5.1.22 from 
 https://www.virtualbox.org/wiki/Downloads. Then either open the droidfaxAE.vbox file with 
 VirtualBox or create a new Linux 64bit VM by using the VDI image droidfax.vdi instead of 
-creating a new virtual hard disk.
+creating a new virtual hard disk. (Please make sure that your machine itself supports VM 
+running a 64bit OS; enabling this support sometimes needs to change BIOS options.)
 
 We have verified the workings of this VM on Ubuntu 16.04 LTS (the VM OS itself is also Ubuntu 
 16.04 LTS). We set 8GB RAM for this VM during our test. Once installed, launch the VM. If logon 
