@@ -33,7 +33,7 @@ o	benchmarks
 o	GeneralReport
 o	ICCReport
 o	interAppICCReport
-o	Security
+o	SecurityReport
 o	produceall.sh, cleanall.sh
 *	web
 o	page_usage.html
@@ -46,7 +46,7 @@ o	droidfax.vdi
 The code and data folders include the analysis code and our dataset, respectively, as already 
 described in detail in the one-page artifact paper. In particular, corresponding to what is 
 described at the end of Section 2, scripts under code/scripts are those used for running the 
-toolkit¡¯s three phases, scripts under code/scripts/processResult are those used for processing 
+toolkit's three phases, scripts under code/scripts/processResult are those used for processing 
 the raw study results into graphical/tabular formats used in the research paper, and finally the 
 scripts under code/scripts/apkmng are those used for accessing (e.g., downloading, 
 uninstalling/installing, and querying) APKs.
@@ -79,8 +79,8 @@ Password: droidfax
 
 The next two sections assume that you have launched and logged in to the VM.
 Explore the artifact
-First, open the terminal, then explore as follows (for convenience, you can always use ¡°tree  
-dirname¡± to explore a directory dirname¡¯s structure; the tree tool has been installed).
+First, open the terminal, then explore as follows (for convenience, you can always use "tree  
+dirname" to explore a directory dirname's structure; the tree tool has been installed).
 
 Most of the following steps concern only browsing original inputs to the study, intermediate 
 files produced, raw study results, and final results reported in research paper. We only provide 
@@ -106,7 +106,7 @@ communicating through explicit ICCs and 55 through implicit ICCs. We used these 
 in our study for characterizing inter-app ICCs. All other characterization steps only need 
 and use individual apps (all from the pairs we used).
 
-A list of individual app benchmarks¡¯ package names is located under /home/hcai/bin 
+A list of individual app benchmarks' package names is located under /home/hcai/bin 
 (used-benign-apps-droidfax.txt). We did not repeatedly place the APKs on this VM in 
 order to reduce the total VM size. For the same reason, the instrumented benchmarks 
 and the execution traces are not placed either because they are very large in size. We 
@@ -115,7 +115,7 @@ benchmarks.
 
 The raw study results are located under testbed/results, where the folders hold the raw 
 results for the three characterization dimensions (General/Structure, ICC, Security). The 
-folder names are those of the dimensions suffixed with ¡®Report¡¯; for ICC results, an 
+folder names are those of the dimensions suffixed with 'Report'; for ICC results, an 
 additional folder called interAppICCReport holds the results related to inter-app ICC 
 metrics. Under each folder, the .txt files are raw characterization results and the R and 
 Python scripts are used for visualizing and/or tabulating the results, outcome of which 
@@ -207,12 +207,12 @@ cd /home/hcai/testbed
 bash eventTrackerDemo.sh
 
 Without arguments to the demo launch scripts (covTrackerDemo.sh and 
-eventTrackerDemoe.sh), the demo will be running in ¡®auto¡¯ mode, meaning that a preselected 
+eventTrackerDemoe.sh), the demo will be running in 'auto' mode, meaning that a preselected 
 app (testbed/adhoc/101.apk) will be used for the demo, and automated generated inputs from 
 Monkey will feed the app for one minute during execution; and at the end of the demo, the 
 screen will show the coverage/event trace. 
 
-To run the demo in a manual mode, just append ¡°manual¡± to the command line (e.g., bash 
+To run the demo in a manual mode, just append "manual" to the command line (e.g., bash 
 eventTrackerDemo.sh manual); then Monkey will not feed inputs, and the screen will prompt 
 you to manually launch the app and manipulate it. As you manipulate the app, the screen will 
 show rolling coverage/event trace. 
@@ -221,7 +221,7 @@ The second optional argument gives the apk of a different app, and the third giv
 Monkey to exercise the app in the auto mode.
 
 The format of the coverage trace is self-evident. The event trace consists of lines each in the 
-format of ¡®[Event] [the category of an event] [the callback method that handles the event]¡¯
+format of '[Event] [the category of an event] [the callback method that handles the event]'
 Known issues
 It is known that the Android emulator is best run on Intel-x86 architecture that has hypervisor 
 support (kvm). However, the supervisor support is rarely available on a VM such as ours created 
