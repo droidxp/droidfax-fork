@@ -160,8 +160,9 @@ Our artifacts have been tested with the following environment settings and tools
 * vim 7.4 (optional, for editing scripts and viewing textual results)
 * googleplay-api and its dependee library python-protobuf (optional, for downloading apps)
 * keytool (year 2015 version) and zipalign (year 2014 version) (used for signing an apk after instrumentation; without signing, the APK won't be installed successfully.)
-o you also need to create a certificate for signing the APKs, see https://developer.android.com/studio/publish/app-signing.html#sign-manually
-o after creating the certificate using keytool, set the keystore location accordingly (in testbed/signandalign.sh)
+    o you also need to create a certificate for signing the APKs, see https://developer.android.com/studio/publish/app-signing.html#sign-manually
+    o after creating the certificate using keytool, set the keystore location accordingly (in testbed/signandalign.sh)
+
 After successfully performing all the above steps, download the entire package here 
 http://chapering.github.io/droidfax.tar.gz
 
