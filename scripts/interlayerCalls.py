@@ -31,6 +31,6 @@ if __name__ == "__main__":
                 "UserCode->SDK", "UserCode->3rdLib", "UserCode->UserCode")
         for i in range(0,9):
             #print pers[i]
-            print cats[i], numpy.mean(pers[i]), numpy.std(pers[i])
+            print "%s\t%f\t%f" % (cats[i], numpy.mean(pers[i]), numpy.std(pers[i]))
 	sys.exit(0)
-	
+

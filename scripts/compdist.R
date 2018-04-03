@@ -55,14 +55,35 @@ boxplot(spm, names=xnames,col=colors,ylab="percentage (unique view)",range=0,cex
 meanspm <- (colMeans(spm, na.rm=TRUE))
 points(meanspm, col="red", pch=18, cex=0.5)
 
+stdspm<- apply( t(spm), 2, sd )
+for (k in 1:ncol(t(xnames))) {
+	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", xnames[k], as.numeric(meanspm[k]), as.numeric(stdspm[k])))
+}
+cat("\n")
+
 pdf("./compdist-uniq-d.pdf",width=3.2,height=3.84)
 boxplot(dpm, names=xnames,col=colors,ylab="percentage (unique view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meandpm <- (colMeans(dpm, na.rm=TRUE))
 points(meandpm, col="red", pch=18, cex=0.5)
 
+stddpm<- apply( t(dpm), 2, sd )
+for (k in 1:ncol(t(xnames))) {
+	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", xnames[k], as.numeric(meandpm[k]), as.numeric(stddpm[k])))
+}
+cat("\n")
+
 pdf("./compdist-ins-d.pdf",width=3.2,height=3.84)
 boxplot(dpmins, names=xnames,col=colors,ylab="percentage (instance view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meandpmins <- (colMeans(dpmins, na.rm=TRUE))
 points(meandpmins, col="red", pch=18, cex=0.5)
+
+stddpmins<- apply( t(dpmins), 2, sd )
+for (k in 1:ncol(t(xnames))) {
+	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", xnames[k], as.numeric(meandpmins[k]), as.numeric(stddpmins[k])))
+}
+cat("\n")
 
 #dev.off

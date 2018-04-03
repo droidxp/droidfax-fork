@@ -51,19 +51,29 @@ boxplot(scb, names=c("lifecycle method","event handler"),col=colors2,ylab="perce
 meanscb <- (colMeans(scb, na.rm=TRUE))
 points(meanscb, col="red", pch=18, cex=0.5)
 
+dnames<-c("lifecycle method","event handler")
+stdscb <- apply( scb, 2, sd, na.rm=TRUE )
+medscb <- apply( scb, 2, median , na.rm=TRUE)
+maxscb <- apply( scb, 2, max, na.rm=TRUE )
+minscb <- apply( scb, 2, min, na.rm=TRUE )
+for (k in 1:ncol(scb)) {
+	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\t%.2f%%\t%.2f%%\t%.2f%%\n", dnames[k], as.numeric(meanscb[k]), as.numeric(stdscb[k]),as.numeric(minscb[k]),as.numeric(maxscb[k]),as.numeric(medscb[k])))
+}
+cat("\n")
+
 pdf("./callback-d.pdf",width=2.5,height=3.0)
 boxplot(dcb, names=c("lifecycle method","event handler"),col=colors2,ylab="percentage (unique view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meandcb <- (colMeans(dcb, na.rm=TRUE))
 points(meandcb, col="red", pch=18, cex=0.5)
 
-dnames<-c("lifecycle method","event handler")
 stddcb <- apply( dcb, 2, sd, na.rm=TRUE )
 meddcb <- apply( dcb, 2, median , na.rm=TRUE)
 maxdcb <- apply( dcb, 2, max, na.rm=TRUE )
 mindcb <- apply( dcb, 2, min, na.rm=TRUE )
 for (k in 1:ncol(dcb)) {
 	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%% (%.2f%%)\t%.2f%%\t%.2f%%\t%.2f%%\n", dnames[k], as.numeric(meandcb[k]), as.numeric(stddcb[k]),as.numeric(mindcb[k]),as.numeric(maxdcb[k]),as.numeric(meddcb[k])))
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\t%.2f%%\t%.2f%%\t%.2f%%\n", dnames[k], as.numeric(meandcb[k]), as.numeric(stddcb[k]),as.numeric(mindcb[k]),as.numeric(maxdcb[k]),as.numeric(meddcb[k])))
 }
 cat("\n")
 
@@ -78,7 +88,7 @@ maxdcbins <- apply( dcbins, 2, max, na.rm=TRUE)
 mindcbins <- apply( dcbins, 2, min, na.rm=TRUE)
 for (k in 1:ncol((dcbins))) {
 	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%% (%.2f%%)\t%.2f%%\t%.2f%%\t%.2f%%\n", dnames[k], as.numeric(meandcbins[k]), as.numeric(stddcbins[k]),as.numeric(mindcbins[k]),as.numeric(maxdcbins[k]),as.numeric(meddcbins[k])))
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\t%.2f%%\t%.2f%%\t%.2f%%\n", dnames[k], as.numeric(meandcbins[k]), as.numeric(stddcbins[k]),as.numeric(mindcbins[k]),as.numeric(maxdcbins[k]),as.numeric(meddcbins[k])))
 }
 
 #dev.off

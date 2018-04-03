@@ -66,9 +66,10 @@ meanalls <- (colMeans(t(alls)))
 points( meanalls, seq_along(meanalls), col='gold', pch=18, cex=0.5 )
 
 stdalls <- apply( t(alls), 2, sd )
-for (k in 1:ncol(t(alls))) {
+#for (k in 1:ncol(t(alls))) {
+for (k in order(meanalls)) {
 	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%% (%.2f%%)\n", snames[k], as.numeric(meanalls[k]), as.numeric(stdalls[k])))
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", snames[k], as.numeric(meanalls[k]), as.numeric(stdalls[k])))
 }
 cat("\n")
 
@@ -95,9 +96,10 @@ meanalld <- (colMeans(t(alld)))
 points( meanalld, seq_along(meanalld), col='gold', pch=18, cex=0.5 )
 
 stdalld <- apply( t(alld), 2, sd )
-for (k in 1:ncol(t(alld))) {
+#for (k in 1:ncol(t(alld))) {
+for (k in order(meanalld)) {
 	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%% (%.2f%%)\n", dnames[k], as.numeric(meanalld[k]), as.numeric(stdalld[k])))
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", dnames[k], as.numeric(meanalld[k]), as.numeric(stdalld[k])))
 }
 cat("\n")
 
@@ -124,9 +126,10 @@ meanalldIns <- (colMeans(t(alldIns)))
 points( meanalldIns, seq_along(meanalldIns), col='gold', pch=18, cex=0.5 )
 
 stdalldIns <- apply( t(alldIns), 2, sd )
-for (k in 1:ncol(t(alldIns))) {
+#for (k in 1:ncol(t(alldIns))) {
+for (k in order(meanalldIns)) {
 	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%% (%.2f%%)\n", dnamesIns[k], as.numeric(meanalldIns[k]), as.numeric(stdalldIns[k])))
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", dnamesIns[k], as.numeric(meanalldIns[k]), as.numeric(stdalldIns[k])))
 }
 cat("\n")
 

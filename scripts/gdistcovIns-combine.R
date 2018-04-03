@@ -42,10 +42,17 @@ xnames<-c("UserCode", "", "3rdLib", "", "SDK", "")
 pches<-c(0:8)
 
 pdf("./gdist-ins-d.pdf",width=2.5,height=3.0)
-s <- cbind( dpmclsins[,1], dpmmeins[,1], dpmclsins[,2], dpmmeins[,2], dpmclsins[,3], dpmmeins[,3] )
-boxplot(s, names=xnames,col=colors,ylab="percentage (instance view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
-means <- (colMeans(s, na.rm=TRUE))
-points(means, col="red", pch=18, cex=0.5)
+insd <- cbind( dpmclsins[,1], dpmmeins[,1], dpmclsins[,2], dpmmeins[,2], dpmclsins[,3], dpmmeins[,3] )
+boxplot(insd, names=xnames,col=colors,ylab="percentage (instance view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
+meaninsd <- (colMeans(insd, na.rm=TRUE))
+points(meaninsd, col="red", pch=18, cex=0.5)
 legend("topleft", legend=c("class", "method"), cex=.5, col=c("#ffff33","gray80"), lwd=4.5, bty="n")
+
+stdinsd<- apply( t(insd), 2, sd )
+for (k in 1:ncol(t(xnames))) {
+	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", xnames[k], as.numeric(meaninsd[k]), as.numeric(stdinsd[k])))
+}
+cat("\n")
 
 #dev.off

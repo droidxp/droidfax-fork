@@ -64,9 +64,23 @@ means <- (colMeans(s, na.rm=TRUE))
 points(means, col="red", pch=18, cex=0.5)
 legend("topleft", legend=c("class", "method"), cex=.5, col=c("#ffff33","gray80"), lwd=.8, bty="n")
 
+stds<- apply( t(s), 2, sd )
+for (k in 1:ncol(t(xnames))) {
+	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", xnames[k], as.numeric(means[k]), as.numeric(stds[k])))
+}
+cat("\n")
+
 pdf("./gdist-uniq-d.pdf",width=2.5,height=3.0)
 d <- cbind( dpmcls[,1], dpmme[,1], dpmcls[,2], dpmme[,2], dpmcls[,3], dpmme[,3] )
 boxplot(d, names=xnames,col=colors,ylab="percentage (unique view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meand <- (colMeans(d, na.rm=TRUE))
 points(meand, col="red", pch=18, cex=0.5)
 legend("topleft", legend=c("class", "method"), cex=.5, col=c("#ffff33","gray80"), lwd=4.5, bty="n",lty=1)
+
+stdd<- apply( t(d), 2, sd )
+for (k in 1:ncol(t(xnames))) {
+	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", xnames[k], as.numeric(meand[k]), as.numeric(stdd[k])))
+}
+cat("\n")

@@ -44,6 +44,16 @@ for(i in seq(1,nrow(tdata),1)) {
 	r <- r+1
 }
 
+mysummary <- function(names, data) {
+    meandata<- (colMeans(data, na.rm=TRUE))
+    stddata<- apply( t(data), 2, sd, na.rm=TRUE)
+    for (k in 1:ncol(t(names))) {
+        #print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+        cat(sprintf("%s\t%.2f%%\t%.2f%%\n", names[k], as.numeric(meandata[k]), as.numeric(stddata[k])))
+    }
+    cat("\n")
+}
+
 #print(paste(inv," invalid data points ignored."))
 
 colors2<-c("gray80","gray80") #,"black","yellow","darkorange","darkorchid","red4","darkgrey")
@@ -53,16 +63,19 @@ pdf("./srcsink-s.pdf",width=2.5,height=3.0)
 boxplot(ssusi, names=c("source","sink"),col=colors2,ylab="percentage (unique view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meanssusi <- (colMeans(ssusi, na.rm=TRUE))
 points(meanssusi, col="red", pch=18, cex=0.5)
+mysummary (c("source", "sink"),ssusi)
 
 pdf("./srcsink-d.pdf",width=2.5,height=3.0)
 boxplot(dsusi, names=c("source","sink"),col=colors2,ylab="percentage (unique view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meandsusi <- (colMeans(dsusi, na.rm=TRUE))
 points(meandsusi, col="red", pch=18, cex=0.5)
+mysummary (c("source", "sink"),dsusi)
 
 pdf("./srcsink-dins.pdf",width=2.5,height=3.0)
 boxplot(dsusiins, names=c("source","sink"),col=colors2,ylab="percentage (instance view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meandsusiins <- (colMeans(dsusiins, na.rm=TRUE))
 points(meandsusiins, col="red", pch=18, cex=0.5)
+mysummary (c("source", "sink"),dsusiins)
 
 pdf("./srcsink-risk.pdf",width=3.5,height=3.0)
 boxplot(drisk, names=c("esc-src-uniq","rch-sink-uniq","esc-src-ins","rch-sink-ins"),col=colors4,ylab="percentage (both views)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
@@ -73,11 +86,15 @@ pdf("./srcsink-risk-d.pdf",width=2.5,height=3.0)
 boxplot(drisk[,1:2], names=c("risky source","risky sink"),col=colors2,ylab="percentage (unique view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meandrisk <- (colMeans(drisk[,1:2], na.rm=TRUE))
 points(meandrisk, col="red", pch=18, cex=0.5)
+mysummary(c("risky source", "risky sink"),drisk[,1:2])
 
 pdf("./srcsink-risk-dins.pdf",width=2.5,height=3.0)
-boxplot(drisk[,3:4], names=c("risky source","risky sink"),col=colors2,ylab="percentage (unique view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
+boxplot(drisk[,3:4], names=c("risky source","risky sink"),col=colors2,ylab="percentage (instance view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meandrisk <- (colMeans(drisk[,3:4], na.rm=TRUE))
 points(meandrisk, col="red", pch=18, cex=0.5)
+mysummary(c("risky source", "risky sink"),drisk[,3:4])
+
+
 
 #dev.off
 

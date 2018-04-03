@@ -39,9 +39,17 @@ print(paste(inv," invalid data points ignored."))
 colors<-c("red","green","blue","darkorange") #,"black","yellow","darkorange","darkorchid","gold4","darkgrey")
 
 pdf("./deicc.pdf")
-boxplot(deicc, names=c("int_ex","int_im","ext_ex","ex_im"),col=colors,ylab="percentage")
+icctypenames=c("int_ex","int_im","ext_ex","ex_im")
+boxplot(deicc, names=icctypenames,col=colors,ylab="percentage")
 meandeicc <- (colMeans(deicc, na.rm=TRUE))
 points(meandeicc, col="gold", pch=18, cex=1.5)
+
+stdicc<- apply( t(deicc), 2, sd, na.rm=TRUE)
+for (k in 1:ncol(t(icctypenames))) {
+	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", icctypenames[k], as.numeric(meandeicc[k]), as.numeric(stdicc[k])))
+}
+cat("\n")
 
 #dev.off
 
