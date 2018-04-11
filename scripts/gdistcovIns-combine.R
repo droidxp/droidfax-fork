@@ -43,7 +43,7 @@ pches<-c(0:8)
 
 pdf("./gdist-ins-d.pdf",width=2.5,height=3.0)
 insd <- cbind( dpmclsins[,1], dpmmeins[,1], dpmclsins[,2], dpmmeins[,2], dpmclsins[,3], dpmmeins[,3] )
-boxplot(insd, names=xnames,col=colors,ylab="percentage (instance view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
+boxplot(insd, names=xnames,col=colors,ylab="percentage (dynamic view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meaninsd <- (colMeans(insd, na.rm=TRUE))
 points(meaninsd, col="red", pch=18, cex=0.5)
 legend("topleft", legend=c("class", "method"), cex=.5, col=c("#ffff33","gray80"), lwd=4.5, bty="n")

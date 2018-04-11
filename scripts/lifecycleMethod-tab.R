@@ -58,7 +58,7 @@ for (key in ls(scatdata)) {
 }
 alls<-alls[rowSums(is.na(alls)) != ncol(alls),]
 #boxplot( t(alls), names=snames, ylab="percentage (unique view)", horizontal=FALSE, las=1, cex.names=0.1, range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5, col=colors)
-boxplot( t(alls), names=snames, xlab="percentage (unique view)", horizontal=TRUE, las=1, cex.names=0.1, range=0,cex.axis=0.25,lwd=0.3,cex.lab=0.5, col=colors)
+boxplot( t(alls), names=snames, xlab="percentage (static view)", horizontal=TRUE, las=1, cex.names=0.1, range=0,cex.axis=0.25,lwd=0.3,cex.lab=0.5, col=colors)
 #boxplot( t(alld), xlab="percentage", horizontal=TRUE, las=1, cex.axis=.5, cex.names=.5)
 meanalls <- (colMeans(t(alls),na.rm=TRUE))
 #points( meanalls, col='gold', pch=18, cex=0.5 )
@@ -120,7 +120,7 @@ for (key in ls(catdataIns)) {
 #alld<-alld[rowSums(is.na(alld)) == 0,]
 alldIns<-alldIns[rowSums(is.na(alldIns)) != ncol(alldIns),]
 #boxplot( t(alldIns), names=dnamesIns, ylab="percentage (instance view)", horizontal=FALSE, las=1, cex.names=0.1, range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5, col=colors)
-boxplot( t(alldIns), names=dnamesIns, xlab="percentage (instance view)", horizontal=TRUE, las=1, cex.names=0.1, range=0,cex.axis=0.25,lwd=0.3,cex.lab=0.5, col=colors)
+boxplot( t(alldIns), names=dnamesIns, xlab="percentage (dynamic view)", horizontal=TRUE, las=1, cex.names=0.1, range=0,cex.axis=0.25,lwd=0.3,cex.lab=0.5, col=colors)
 #boxplot( t(alld), xlab="percentage", horizontal=TRUE, las=1, cex.axis=.5, cex.names=.5)
 meanalldIns <- (colMeans(t(alldIns), na.rm=TRUE))
 #points( meanalldIns, col='gold', pch=18, cex=0.5 )

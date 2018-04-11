@@ -92,7 +92,7 @@ for (key in ls(catdataIns)) {
 #print(dnames)
 #alld<-alld[rowSums(is.na(alld)) == 0,]
 alldIns<-alldIns[rowSums(is.na(alldIns)) != ncol(alldIns),]
-boxplot( t(alldIns), names=dnamesIns, ylab="percentage (instance view)", horizontal=TRUE, las=1, cex.names=0.1, range=0,cex.axis=0.25,lwd=0.3,cex.lab=0.5, col=colors)
+boxplot( t(alldIns), names=dnamesIns, ylab="percentage (dynamic view)", horizontal=TRUE, las=1, cex.names=0.1, range=0,cex.axis=0.25,lwd=0.3,cex.lab=0.5, col=colors)
 #boxplot( t(alld), xlab="percentage", horizontal=TRUE, las=1, cex.axis=.5, cex.names=.5)
 meanalldIns <- (colMeans(t(alldIns)))
 #points( meanalldIns, col='gold', pch=18, cex=1.5 )

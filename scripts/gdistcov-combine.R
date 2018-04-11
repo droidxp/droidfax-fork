@@ -54,7 +54,7 @@ pches<-c(0:8)
 
 pdf("./gdist-uniq-s.pdf",width=2.5,height=3.0)
 s <- cbind( spmcls[,1], spmme[,1], spmcls[,2], spmme[,2], spmcls[,3], spmme[,3] )
-boxplot(s, names=xnames,col=colors,range=0,ylab="percentage (unique view)",cex.axis=0.4,lwd=0.3,cex.lab=0.5)
+boxplot(s, names=xnames,col=colors,range=0,ylab="percentage (static view)",cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 #mtext(side = 1, text = "code layer", line = 1, cex=.3)
 #mtext(side = 2, text = "percentage (unique view)", line = 1, cex=.3)
 #boxplot(s, names=xnames,col=colors,ylab="percentage",at=c(1,2,5,6,9,10),range=0)

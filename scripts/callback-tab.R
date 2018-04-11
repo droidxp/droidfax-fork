@@ -47,7 +47,7 @@ colors2<-c("gray80","gray80") #,"black","yellow","darkorange","darkorchid","red4
 colors4<-c("red","green","blue","darkorange") #,"black","yellow","darkorange","darkorchid","red4","darkgrey")
 
 pdf("./callback-s.pdf",width=2.5,height=3.0)
-boxplot(scb, names=c("lifecycle method","event handler"),col=colors2,ylab="percentage (unique view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
+boxplot(scb, names=c("lifecycle method","event handler"),col=colors2,ylab="percentage (static view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meanscb <- (colMeans(scb, na.rm=TRUE))
 points(meanscb, col="red", pch=18, cex=0.5)
 
@@ -78,7 +78,7 @@ for (k in 1:ncol(dcb)) {
 cat("\n")
 
 pdf("./callback-dins.pdf",width=2.5,height=3.0)
-boxplot(dcbins, names=c("lifecycle method","event handler"),col=colors2,ylab="percentage (instance view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
+boxplot(dcbins, names=c("lifecycle method","event handler"),col=colors2,ylab="percentage (dynamic view)",range=0,cex.axis=0.4,lwd=0.3,cex.lab=0.5)
 meandcbins <- (colMeans(dcbins, na.rm=TRUE))
 points(meandcbins, col="red", pch=18, cex=0.5)
 
