@@ -11,9 +11,9 @@ subjectloc=`pwd`
 
 OUTDIR=${2:-"$subjectloc/cg.instrumented/"}
 
-MAINCP="$ROOT/libs/rt.jar:$ROOT/libs/polyglot.jar:$ROOT/libs/soot-trunk.jar:$ROOT/libs/duafdroid.jar:$ROOT/workspace/droidfax/bin:$ROOT/libs/java_cup.jar"
+MAINCP="$ROOT/libs/rt.jar:$ROOT/libs/polyglot.jar:$ROOT/libs/soot-trunk.jar:$ROOT/workspace/duafdroid/bin:$ROOT/workspace/droidfax/bin:$ROOT/libs/java_cup.jar"
 
-SOOTCP="$ROOT/workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-19/android.jar"
+SOOTCP="$ROOT/workspace/droidfax/bin:/home/hcai/Android/Sdk/platforms/android-21/android.jar"
 
 for i in $ROOT/libs/*.jar;
 do
@@ -31,9 +31,6 @@ logout=$LOGDIR/instr-$suffix.out
 logerr=$LOGDIR/instr-$suffix.err
 
 mkdir -p $OUTDIR
-
-pkgname=`$ROOT/bin/getpackage.sh $apkfile | awk '{print $2}'`
-echo -e "\n\n\tcgInstrumenting $pkgname ..."
 
 starttime=`date +%s%N | cut -b1-13`
 
@@ -59,24 +56,21 @@ starttime=`date +%s%N | cut -b1-13`
     #-monitorEvents \
 	#-catcallback /home/hcai/libs/catCallbacks.txt \
     #-instrlifecycle \
-cmd="java -Xmx14g -ea -cp ${MAINCP} dynCG.sceneInstr \
+cmd="java -Xmx14g -Xss1g -ea -cp ${MAINCP} dynCG.sceneInstr \
 	-w -cp $SOOTCP -p cg verbose:false,implicit-entry:true \
 	-p cg.spark verbose:false,on-fly-cg:true,rta:false \
 	-d $OUTDIR \
 	-instr3rdparty \
 	-process-dir $apkfile"
 
-#($cmd | tee $logout) 3>&1 1>&2 2>&3 | tee $logerr
+($cmd | tee $logout) 3>&1 1>&2 2>&3 | tee $logerr
 #${cmd} 2>&1 | tee $logout
-${cmd} 2>$logerr 1>$logout
 
 stoptime=`date +%s%N | cut -b1-13`
 echo "StaticAnalysisTime for $suffix elapsed: " `expr $stoptime - $starttime` milliseconds
 echo "static analysis finished."
 
-echo "now signing $suffix ..."
-echo "chapple" | ./signandalign.sh $OUTDIR/${suffix}.apk >/dev/null
-echo
+echo "chapple" | ./signandalign.sh $OUTDIR/${suffix}.apk
 exit 0
 
 

@@ -1,12 +1,10 @@
 #!/bin/bash
 
-(test $# -lt 3) && (echo "too few arguments") && exit 0
+#(test $# -lt 1) && (echo "too few arguments") && exit 0
 
-indir=$1
-linkage=$2
-tmv=${3:-"3600"}
-srcdir=/home/hcai/testbed/cg.instrumented/$indir/pairs/${linkage}
-OUTDIR=/home/hcai/testbed/pairTrace_$linkage
+tmv=${1:-"3600"}
+OUTDIR=/home/hcai/testbed/monkeyLogs_explicit
+#OUTDIR=/home/hcai/testbed/monkeyLogs_implicit
 mkdir -p $OUTDIR
 
 timeout() {
@@ -25,23 +23,17 @@ timeout() {
 
 }
 
-for ((i=1;i<=55;i++))
+#for ((i=1;i<=54;i++))
+for ((i=1;i<=7;i++))
 do
-	if [ ! -s $srcdir/${i}/s.apk ];then continue; fi
-	if [ ! -s $srcdir/${i}/t.apk ];then continue; fi
-
 	echo "================ RUN APP PAIR $i ==========================="
-	echo "Starting android emulator ......"
-	/home/hcai/testbed/setupEmu.sh Nexus-One-10 2>/dev/null 1>&2
-
-	/home/hcai/testbed/singlePairInstall.sh $indir $linkage $i
+	/home/hcai/testbed/setupEmu.sh Galaxy-Nexus-23
+	/home/hcai/testbed/singlePairInstall.sh $i
 	adb logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${i}.logcat &
+	#adb shell monkey --ignore-crashes --ignore-timeouts --ignore-security-exceptions --throttle 200 1
+	timeout $tmv "/home/hcai/testbed/runPair.sh $i >$OUTDIR/${i}.monkey"
 
-	timeout $tmv "/home/hcai/testbed/runPair.sh $indir $linkage $i >$OUTDIR/${i}.monkey"
-
-	/home/hcai/testbed/singlePairUninstall.sh $indir $linkage $i
-
-	killall -9 adb
+	adb kill-server
 	killall -9 adb
 done
 

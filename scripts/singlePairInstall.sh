@@ -1,12 +1,11 @@
 #!/bin/bash
 
-(test $# -lt 3) && (echo "too few arguments") && exit 0
+(test $# -lt 1) && (echo "too few arguments") && exit 0
 
-indir=$1
-linkage=$2
-pn=$3
-destdir=/home/hcai/testbed/cg.instrumented/$indir/pairs/
-finaldir=$destdir/${linkage}
+pn=$1
+destdir=/home/hcai/testbed/cg.instrumented/pairs/
+#finaldir=$destdir/implicit_installed
+finaldir=$destdir/explicit_installed
 
 install()
 {

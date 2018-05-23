@@ -1,28 +1,31 @@
 #!/bin/bash
 
-(test $# -lt 3) && (echo "too few arguments") && exit 0
+(test $# -lt 1) && (echo "too few arguments") && exit 0
 
-indir=$1
-linkage=$2
-resdir=$3
-APKDIR=/home/hcai/testbed/$indir/pairs/$linkage
-TRACEDIR=/home/hcai/testbed/pairTrace_$linkage
+rep=${1:-"first_rep"}
+cat=${2:-"implicit"}
+APKDIR=/home/hcai/testbed/input/pairs/$cat/
+TRACEDIR=/home/hcai/testbed/$rep/monkeyLogs_$cat
 
-resultdir=/home/hcai/testbed/$resdir/interAppICCReport/$linkage
-mkdir -p $resultdir
-resultlog=$resultdir/log.interAppICCReport.all.$linkage
+pairs=7
+if [ $cat = "implicit" ];then
+	pairs=54
+fi
+
+resultdir=/home/hcai/testbed/results/interAppICCReport/$rep
+mkdir -p $resultdir $resultdir/$cat
+resultlog=$resultdir/log.interAppICCReport.all.$cat
 > $resultlog
-for ((i=1;i<=54;i++))
+for ((i=1;i<=${pairs};i++))
 do
-	if [ ! -d $APKDIR/$i ];then continue; fi
-	echo "result for $linkage pair $i" >> $resultlog 2>&1
-	/home/hcai/bin/getpackage.sh $APKDIR/$i/s.apk >> $resultlog 2>&1
-	/home/hcai/bin/getpackage.sh $APKDIR/$i/t.apk >> $resultlog 2>&1
-	bash /home/hcai/testbed/interAppICCReport.sh \
-		$APKDIR/$i \
-		$TRACEDIR/$i.logcat >> $resultlog 2>&1
+	echo "result for $cat pair $i" >> $resultlog 2>&1
+	/home/hcai/bin/getpackage.sh /home/hcai/testbed/input/pairs/$cat/$i/s.apk >> $resultlog 2>&1
+	/home/hcai/bin/getpackage.sh /home/hcai/testbed/input/pairs/$cat/$i/t.apk >> $resultlog 2>&1
+	sh /home/hcai/testbed/interAppICCReport.sh \
+		/home/hcai/testbed/input/pairs/$cat/$i \
+		/home/hcai/testbed/$rep/monkeyLogs_$cat/$i.logcat >> $resultlog 2>&1
 done
 mv /home/hcai/testbed/{gicc.txt,dataicc.txt,extraicc.txt,icclink.txt,bothdataicc.txt,pairicc.txt} \
-	$resultdir	
+	/home/hcai/testbed/results/interAppICCReport/$rep/$cat/
 
 exit 0

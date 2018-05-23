@@ -11,7 +11,7 @@ echo "sign the apk ..."
 jarsigner -verbose \
 		-sigalg SHA1withRSA \
 		-digestalg SHA1 \
-		-keystore /home/hcai/testbed/hcai4android.keystore \
+		-keystore hcai4android.keystore \
 		$apkfile \
 		hcai_for_android
 

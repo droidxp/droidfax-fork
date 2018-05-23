@@ -9,7 +9,8 @@ OUTDIR=/home/hcai/testbed/ContagioLogs
 mkdir -p $OUTDIR
 
 destdir=/home/hcai/testbed/cg.instrumented/Contagio/
-finaldir=$destdir/installed
+#finaldir=$destdir/installed
+finaldir=$destdir/
 
 timeout() {
 
