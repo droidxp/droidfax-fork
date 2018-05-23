@@ -655,7 +655,9 @@ public class iccReport implements Extension {
 						"data_only" + "\t" + "extras_only" + "\t" + "data_both");
 		}
 		// 1. ICC categorization
-		os.print(this.packName);
+		//os.print(this.packName);
+		os.print (utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		
 		int iccTotal = int_ex_inc+int_ex_out+int_im_inc+int_im_out+ext_ex_inc+ext_ex_out+ext_im_inc+ext_im_out;
 		os.print("\t" + percentage(int_ex_inc+int_ex_out, iccTotal) +
 				 "\t" + percentage(int_im_inc+int_im_out, iccTotal) +

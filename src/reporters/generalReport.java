@@ -32,6 +32,7 @@ import dua.global.ProgramFlowGraph;
 
 import soot.*;
 import utils.iccAPICom;
+import utils.utils;
 import dynCG.*;
 import dynCG.callGraph.CGEdge;
 import dynCG.callGraph.CGNode;
@@ -561,7 +562,10 @@ public class generalReport implements Extension {
 			   "\t"+"activityIns"+"\t"+"serviceIns"+"\t"+"receiverIns"+"\t"+"providerIns");
 		}
 		// 1. inter-code-layer calls - all nine categories - percentage of instances
-		os.print(this.packName);
+		//os.print(this.packName);
+		System.out.println("apkname = " + utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		os.print (utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		
 		for (String cat : cats) {
 			//if (!c2n.containsKey(cat)) if (!cat.contains("Unknown")) {System.out.println("weird cat=" + cat); assert false;}
 			os.print("\t" + percentage(c2n.get(cat), totaln));

@@ -1023,7 +1023,9 @@ public class securityReport implements Extension {
 			os.println();
 		}
 		// 1. src/sink usage and reachability
-		os.print(this.packName);
+		//os.print(this.packName);
+		os.print (utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		
 		os.print("\t" + percentage(srcCov.getCovered(),allCoveredMethods.size()) +
 				   "\t" + percentage(sinkCov.getCovered(), allCoveredMethods.size()) +
 				   "\t" + percentage(allSrcInCalls, allMethodInCalls) + 

@@ -691,6 +691,14 @@ public class utils {
 	        // to Michael Pan.
 	        return buffer.toString().intern();
 	    }
+	 
+	 public static String getFileNameFromPath (String filePath) {
+		 File f = new File(filePath);
+		 if(f.exists() && !f.isDirectory()) {
+			 return f.getName();
+		 }
+		 return "NOT A FILE";
+	 }
 
 }
 
