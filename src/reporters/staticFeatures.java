@@ -258,7 +258,7 @@ public class staticFeatures implements Extension {
 		
 		traverse();
 		
-		String dir = System.getProperty("user.dir");
+		String dir = opts.resultDir;
 		
 		try {
 			String fngdistfeature = dir + File.separator + "staticfeatures.txt";
@@ -413,9 +413,11 @@ public class staticFeatures implements Extension {
 			os.println("userCode-cls"+"\t"+"3rdLib-cls"+"\t"+"sdk-cls"+"\t"+"userCode-me"+"\t"+"3rdlib-me"+"\t"+"sdk-me"+
 			   "\t"+"activity"+"\t"+"service"+"\t"+"receiver"+"\t"+"provider");
 		}
-		System.out.println("apkname = " + utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
-		os.print (utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
-		
+		//System.out.println("apkname = " + utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		//os.print (utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		String featureKey = utils.getFeatureKey(soot.options.Options.v().process_dir().get(0), opts);
+		System.out.println("feature-vector-key = " + featureKey);
+		os.print (featureKey);
 		
 		// 1. composition - percentage of each code layer (w.r.t call targets) 
 		int sclsTotal = (appClsCov.getTotal()+ulClsCov.getTotal()+sdkClsCov.getTotal());

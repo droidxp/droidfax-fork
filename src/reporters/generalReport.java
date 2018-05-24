@@ -183,7 +183,7 @@ public class generalReport implements Extension {
 			}
 		}
 		
-		String dir = System.getProperty("user.dir");
+		String dir = opts.resultDir;
 		
 
 		try {
@@ -563,8 +563,11 @@ public class generalReport implements Extension {
 		}
 		// 1. inter-code-layer calls - all nine categories - percentage of instances
 		//os.print(this.packName);
-		System.out.println("apkname = " + utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
-		os.print (utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		//System.out.println("apkname = " + utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		//os.print (utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		String featureKey = utils.getFeatureKey(soot.options.Options.v().process_dir().get(0), opts);
+		System.out.println("feature-vector-key = " + featureKey);
+		os.print (featureKey);
 		
 		for (String cat : cats) {
 			//if (!c2n.containsKey(cat)) if (!cat.contains("Unknown")) {System.out.println("weird cat=" + cat); assert false;}

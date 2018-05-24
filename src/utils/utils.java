@@ -19,6 +19,10 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,14 +35,17 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import javax.xml.bind.DatatypeConverter;
+
 import dua.method.CFGDefUses.Variable;
+import dua.global.ProgramFlowGraph;
 import dua.method.CallSite;
 import dua.util.Pair;
 import dua.util.Util;
 import fault.StmtMapper;
 
 import profile.UtilInstrum;
-
+import reporters.reportOpts;
 import soot.*;
 import soot.jimple.AssignStmt;
 import soot.jimple.Constant;
@@ -698,6 +705,26 @@ public class utils {
 			 return f.getName();
 		 }
 		 return "NOT A FILE";
+	 }
+	 
+	 public static String getFeatureKey(String fnapk, reportOpts opts) {
+		 if (opts.featureKey.compareToIgnoreCase("packagename")==0) {
+			 return ProgramFlowGraph.appPackageName;
+		 }
+		 if (opts.featureKey.compareToIgnoreCase("apkname")==0) {
+			 return getFileNameFromPath(fnapk);
+		 }
+		 
+		 MessageDigest md;
+		 String ret = getFileNameFromPath(fnapk); // fall back to apk name if getting md5 fails
+		 try {
+			md = MessageDigest.getInstance("MD5");
+			md.update(Files.readAllBytes(Paths.get(fnapk)));
+			ret = DatatypeConverter.printHexBinary(md.digest()).toLowerCase();
+		 } catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret; 
 	 }
 
 }

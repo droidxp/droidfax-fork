@@ -30,12 +30,18 @@ public class reportOpts {
 	protected String apkdir = null;
 	protected String firstapk = null;
 	protected String secondapk = null;
+	
+	// use package name, apk name, or apk's md5 as the key of the feature vector for the app; using apkname is the default
+	public String featureKey = "apkname";
 
 	// whether build dynamic calltree in addition to dynamic callgraph (always build)
 	protected boolean calltree = false; 
 	
 	// just for collecting features for ML-based classification
 	protected boolean featuresOnly = false;
+	
+	// where to put the results
+	protected String resultDir = System.getProperty("user.dir");
 	
 	public String[] process(String[] args) {
 		List<String> argsFiltered = new ArrayList<String>();
@@ -91,6 +97,14 @@ public class reportOpts {
 			}
 			else if (arg.equals("-featuresOnly")) {
 				featuresOnly = true;
+			}
+			else if (arg.equals("-featurekey")) {
+				featureKey = args[i+1];
+				i++;
+			}
+			else if (arg.equals("-resultdir")) {
+				resultDir = args[i+1];
+				i++;
 			}
 			else {
 				argsFiltered.add(arg);

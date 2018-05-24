@@ -203,7 +203,7 @@ public class securityReport implements Extension {
 		
 		traverse();
 		
-		String dir = System.getProperty("user.dir");
+		String dir = opts.resultDir;
 
 		try {
 			String fngdistfeature = dir + File.separator + "securityfeatures.txt";
@@ -1024,7 +1024,9 @@ public class securityReport implements Extension {
 		}
 		// 1. src/sink usage and reachability
 		//os.print(this.packName);
-		os.print (utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		//os.print (utils.getFileNameFromPath(soot.options.Options.v().process_dir().get(0)));
+		String featureKey = utils.getFeatureKey(soot.options.Options.v().process_dir().get(0), opts);
+		os.print (featureKey);
 		
 		os.print("\t" + percentage(srcCov.getCovered(),allCoveredMethods.size()) +
 				   "\t" + percentage(sinkCov.getCovered(), allCoveredMethods.size()) +
