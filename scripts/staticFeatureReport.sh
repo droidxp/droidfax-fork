@@ -1,15 +1,17 @@
 #!/bin/bash
-if [ $# -lt 1 ];then
-	echo "Usage: $0 apk-file"
+if [ $# -lt 2 ];then
+	echo "Usage: $0 apk-file resultdir [feature key]"
 	exit 1
 fi
 
 apkfile=$1
+resultdir=$2
+featurekey=${3:-"apkname"}
 
 ROOT=/home/hcai/
 subjectloc=`pwd`
 
-OUTDIR=${2:-"$subjectloc/cg.instrumented/"}
+OUTDIR=${4:-"$subjectloc/cg.instrumented/"}
 
 MAINCP="$ROOT/libs/rt.jar:$ROOT/libs/polyglot.jar:$ROOT/libs/soot-trunk.jar:$ROOT/workspace/duafdroid/bin:$ROOT/workspace/droidfax/bin:$ROOT/libs/java_cup.jar"
 
@@ -34,7 +36,9 @@ java -Xmx5g -ea -cp ${MAINCP} reporters.staticFeatures \
 	-catsrc /home/hcai/libs/catsources.txt.final \
 	-catsink /home/hcai/libs/catsinks.txt.final \
 	-catcallback /home/hcai/libs/catCallbacks.txt \
-	-process-dir $apkfile 
+	-process-dir $apkfile \
+    -resultdir $resultdir \
+    -featurekey $featurekey 
 
 stoptime=`date +%s%N | cut -b1-13`
 

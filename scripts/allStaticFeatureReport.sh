@@ -5,6 +5,8 @@
 APKDIR=$1
 TRACEDIR=$2
 RESULTDIR=$3
+FEATUREKEY=${4:-"apkname"}
+checklog=${5:-"1"}
 
 mkdir -p $RESULTDIR/staticFeatureReport
 resultlog=$RESULTDIR/staticFeatureReport/log.staticFeatureReport.all
@@ -12,21 +14,19 @@ resultlog=$RESULTDIR/staticFeatureReport/log.staticFeatureReport.all
 for orgapk in $APKDIR/*.apk
 do
     packname=${orgapk##*/}
-	if [ ! -s $TRACEDIR/$packname.logcat ];
-	then
-		continue
-	fi
+
+    if [ $checklog -ge 1 ];then
+        if [ ! -s $TRACEDIR/$packname.logcat ];
+        then
+            continue
+        fi
+    fi
 
     echo "result for $orgapk" >> $resultlog 2>&1
     /home/hcai/bin/getpackage.sh $orgapk >> $resultlog 2>&1
     sh /home/hcai/testbed/staticFeatureReport.sh \
-        $orgapk >> $resultlog 2>&1
+        $orgapk $RESULTDIR/staticFeatureReport $FEATUREKEY >> $resultlog 2>&1
 done
 
-mv /home/hcai/testbed/staticfeatures.txt $RESULTDIR/staticFeatureReport/
-
 exit 0
-
-
-
 
