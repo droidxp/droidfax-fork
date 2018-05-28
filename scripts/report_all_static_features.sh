@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#for year in 2011 2012 2013 2017 "benign-2010" "benign-2014" "benign-2016"
-for year in 2011 2012 2013 2017 "benign-2010" "benign-2014"
+for year in 2011 2012 2013 2017 "benign-2010" "benign-2014" "benign-2016"
 do
     echo "computing features for AndroZoo dataset --- year $year ..."
     bash allStaticFeatureReport.sh /home/hcai/Downloads/AndroZoo/$year /home/hcai/testbed/androZooLogs/$year /home/hcai/testbed/zooresults/$year
@@ -12,6 +11,7 @@ do
     echo "computing features for AndroZoo dataset --- year $year ..."
     bash allStaticFeatureReport.sh /home/hcai/Downloads/AndroZoo/$year /home/hcai/testbed/androZooLogs/$year /home/hcai/testbed/zooresults/$year packagename
 done
+exit 0
 
 # benign 2017
 bash allStaticFeatureReport.sh /home/hcai/bin/apks2017/all/  /home/hcai/testbed/catapkLogs_all/  /home/hcai/testbed/catresults/
