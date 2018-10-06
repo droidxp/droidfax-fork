@@ -66,6 +66,7 @@ import dynCG.callGraph.CGNode;
 import dynCG.traceStat.ICCIntent;
 
 
+
 public class securityReport implements Extension {
 	
 	protected static reportOpts opts = new reportOpts();
@@ -80,6 +81,11 @@ public class securityReport implements Extension {
 	
 	protected final Set<String> allCoveredClasses = new HashSet<String>();
 	protected final Set<String> allCoveredMethods = new HashSet<String>();
+	
+	
+	// use Gator's callback analysis utilities
+	GatorHierarchy hier; 
+	
 	
 	String packName = "";
 	
@@ -265,6 +271,8 @@ public class securityReport implements Extension {
 	 */
 	protected void init() {
 		packName = ProgramFlowGraph.appPackageName;
+		
+		hier = GatorHierarchy.v();
 		
 		// set up the trace stating agent
 		stater.setPackagename(packName);
@@ -777,7 +785,10 @@ public class securityReport implements Extension {
 					}
 				}
 				
-				if (CallbackCls!=null && sMethod.getName().startsWith("on")) {
+				//if (CallbackCls!=null && sMethod.getName().startsWith("on")) {
+				if (CallbackCls!=null && hier.isCallback(sMethod, sClass)) {
+					Logger.verb("WARNING", "Callback method :" + sMethod.getName() + " in Class " + sClass.getName());
+                    
 					traversedEventHandlerMethods.add(meId);
 					eventhandlerCov.incTotal();
 					
