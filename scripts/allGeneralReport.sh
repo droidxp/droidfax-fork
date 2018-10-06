@@ -2,31 +2,30 @@
 
 (test $# -lt 3) && (echo "too few arguments") && exit 0
 
-indir=$1
-linkage=$2
-resdir=$3
-APKDIR=/home/hcai/testbed/$indir/pairs/$linkage
-TRACEDIR=/home/hcai/testbed/singleappTrace_$linkage
+APKDIR=$1
+TRACEDIR=$2
+RESULTDIR=$3
 
-resultdir=/home/hcai/testbed/$resdir/generalReport/$linkage
-mkdir -p $resultdir
-resultlog=$resultdir/log.generalReport.all.$linkage
+mkdir -p $RESULTDIR/generalReport
+resultlog=$RESULTDIR/generalReport/log.generalReport.all
 > $resultlog
-for ((i=1;i<=54;i++))
+for orgapk in $APKDIR/*.apk
 do
-	if [ ! -d $APKDIR/$i ];then continue; fi
-	echo "result for $linkage $i/s.apk" >> $resultlog 2>&1
-	/home/hcai/bin/getpackage.sh $APKDIR/$i/s.apk >> $resultlog 2>&1
-	bash /home/hcai/testbed/generalReport.sh \
-		$APKDIR/$i/s.apk \
-		$TRACEDIR/$i-s.logcat >> $resultlog 2>&1
-
-	echo "result for $linkage $i/t.apk" >> $resultlog 2>&1
-	/home/hcai/bin/getpackage.sh $APKDIR/$i/t.apk >> $resultlog 2>&1
-	bash /home/hcai/testbed/generalReport.sh \
-		$APKDIR/$i/t.apk \
-		$TRACEDIR/$i-t.logcat >> $resultlog 2>&1
+    packname=${orgapk##*/}
+	if [ ! -s $TRACEDIR/$packname.logcat ];
+	then
+        echo $orgapk did not have trace.
+		continue
+	fi
+	#rt=`cat lowcov_malware | awk '{print $1}' | grep -a -c "^${i}.apk.logcat$"`
+	#if [ $rt -lt 1 ];then
+		echo "result for $orgapk" >> $resultlog 2>&1
+		/home/hcai/bin/getpackage.sh $orgapk >> $resultlog 2>&1
+		sh /home/hcai/testbed/generalReport.sh \
+			$orgapk \
+			$TRACEDIR/$packname.logcat \
+            $RESULTDIR/generalReport/ >> $resultlog 2>&1
+	#fi
 done
-mv /home/hcai/testbed/{calleerank.txt,callerrank.txt,calleerankIns.txt,callerrankIns.txt,compdist.txt,edgefreq.txt,gdistcov.txt,gdistcovIns.txt,gfeatures.txt} $resultdir
 
 exit 0

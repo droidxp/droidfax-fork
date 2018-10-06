@@ -1,36 +1,32 @@
 #!/bin/bash
 
-(test $# -lt 1) && (echo "too few arguments") && exit 0
+(test $# -lt 3) && (echo "too few arguments") && exit 0
 
-rep=${1:-"first_rep"}
-cat=${2:-"implicit"}
-APKDIR=/home/hcai/testbed/input/pairs/$cat/
-TRACEDIR=/home/hcai/testbed/$rep/singleAppLogs_$cat
+APKDIR=$1
+TRACEDIR=$2
+RESULTDIR=$3
 
-pairs=7
-if [ $cat = "implicit" ];then
-	pairs=54
-fi
-
-resultdir=/home/hcai/testbed/results/ICCReport/$rep
-mkdir -p $resultdir $resultdir/$cat
-resultlog=$resultdir/log.ICCReport.all.$cat
+mkdir -p $RESULTDIR/ICCReport
+resultlog=$RESULTDIR/ICCReport/log.ICCReport.all
 > $resultlog
-for ((i=1;i<=${pairs};i++))
+for orgapk in $APKDIR/*.apk
 do
-	echo "result for $cat $i/s.apk" >> $resultlog 2>&1
-	/home/hcai/bin/getpackage.sh /home/hcai/testbed/input/pairs/$cat/$i/s.apk >> $resultlog 2>&1
-	sh /home/hcai/testbed/ICCReport.sh \
-		/home/hcai/testbed/input/pairs/$cat/$i/s.apk \
-		/home/hcai/testbed/$rep/singleAppLogs_$cat/$i-s.logcat >> $resultlog 2>&1
-
-	echo "result for $cat $i/t.apk" >> $resultlog 2>&1
-	/home/hcai/bin/getpackage.sh /home/hcai/testbed/input/pairs/$cat/$i/t.apk >> $resultlog 2>&1
-	sh /home/hcai/testbed/ICCReport.sh \
-		/home/hcai/testbed/input/pairs/$cat/$i/t.apk \
-		/home/hcai/testbed/$rep/singleAppLogs_$cat/$i-t.logcat >> $resultlog 2>&1
+    packname=${orgapk##*/}
+	if [ ! -s $TRACEDIR/$packname.logcat ];
+	then
+        echo $orgapk did not have trace.
+		continue
+	fi
+	#rt=`cat lowcov_malware | awk '{print $1}' | grep -a -c "^${i}.apk.logcat$"`
+	#if [ $rt -lt 1 ];then
+		echo "result for $orgapk" >> $resultlog 2>&1
+		/home/hcai/bin/getpackage.sh $orgapk >> $resultlog 2>&1
+		sh /home/hcai/testbed/ICCReport.sh \
+			$orgapk \
+			$TRACEDIR/$packname.logcat \
+            $RESULTDIR/ICCReport >> $resultlog 2>&1
+	#fi
 done
-#mv /home/hcai/testbed/{gicc.txt,dataicc.txt,extraicc.txt,icclink.txt,icccov.txt,bothdataicc.txt} \
-#	/home/hcai/testbed/results/ICCReport/$rep/$cat/
 
 exit 0
+
