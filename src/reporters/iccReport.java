@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import dua.Extension;
 import dua.Forensics;
@@ -304,7 +305,7 @@ public class iccReport implements Extension {
 			*/
 			
 			/* traverse all methods of the class */
-			Iterator<SootMethod> meIt = sClass.getMethods().iterator();
+			Iterator<SootMethod> meIt = new CopyOnWriteArrayList<SootMethod>(sClass.getMethods()).listIterator(); //.iterator();
 			while (meIt.hasNext()) {
 				SootMethod sMethod = (SootMethod) meIt.next();
 				if ( !sMethod.isConcrete() ) {
