@@ -36,7 +36,7 @@ profiling()
 
 	k=1
 
-    /home/hcai/testbed/setupEmu.sh ${avd} $port
+    setupEmu.sh ${avd} $port
     sleep 3
     pidemu=`ps axf | grep -v grep | grep -a -E "$avd -scale .3 -no-boot-anim -no-window -wipe-data -port $port" | awk '{print $1}'`
 

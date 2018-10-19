@@ -28,17 +28,13 @@ profiling()
 {
     cate=$1
 
-    srcdir=/home/hcai/testbed/cg.instrumented/VirusShare/$cate
+    srcdir=/home/hcai/testbed/cov.instrumented/AndroZoo/$cate
     finaldir=$srcdir
 
-    OUTDIR=/home/hcai/testbed/sapienzVirusShareLogs/$cate
+    OUTDIR=/home/hcai/testbed/sapienzCovAndroZooLogs/$cate
     mkdir -p $OUTDIR
 
 	k=1
-
-    setupEmu.sh ${avd} $port
-    sleep 3
-    pidemu=`ps axf | grep -v grep | grep -a -E "$avd -scale .3 -no-boot-anim -no-window -wipe-data -port $port" | awk '{print $1}'`
 
     for fnapk in $finaldir/*.apk;
 	do
@@ -54,11 +50,14 @@ profiling()
         #    continue
         #fi
 
+        setupEmu.sh ${avd} $port
+        pidemu=`ps axf | grep -v grep | grep -a -E "$avd -scale .3 -no-boot-anim -no-window -wipe-data -port $port" | awk '{print $1}'`
+
 		ret=`/home/hcai/bin/apkinstall $fnapk $did`
 		n1=`echo $ret | grep -a -c "Success"`
 		if [ $n1 -lt 1 ];then 
             #echo "killing pid $pidemu, the process of emulator at port $port, from runAndroZooApks_monkey.sh... because app cannot be installed successfully"
-            #kill -9 $pidemu
+            kill -9 $pidemu
             echo "$fnapk cannot be installed successfully, why would we waste time with sapienz then? skipped it."
             continue
         fi
@@ -67,7 +66,7 @@ profiling()
         adb -s $did push lib/motifcore.jar /system/framework
         adb -s $did push resources/motifcore /system/bin
 
-        adb -s $did logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${fnapk##*/}.logcat &
+        adb -s $did logcat -v raw -s "hcai-cov-monitor" &>$OUTDIR/${fnapk##*/}.logcat &
         pidadb=$!
 
         timeout $tmv "python main_hcai.py $fnapk $did"
@@ -76,14 +75,12 @@ profiling()
 
         #rm -rf /tmp/android-hcai/*
 
-        /home/hcai/bin/apkuninstall $fnapk $did
+        timeout 30 "/home/hcai/bin/apkuninstall $fnapk $did"
         kill -9 $pidadb
+        kill -9 $pidemu
 
         ((k=k+1))
 	done
-
-    kill -9 $pidemu
-
 	echo "totally $k apps in category $cate successfully traced."
 }
 

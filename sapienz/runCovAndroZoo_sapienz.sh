@@ -28,10 +28,10 @@ profiling()
 {
     cate=$1
 
-    srcdir=/home/hcai/testbed/cg.instrumented/VirusShare/$cate
+    srcdir=/home/hcai/testbed/cov.instrumented/AndroZoo/$cate
     finaldir=$srcdir
 
-    OUTDIR=/home/hcai/testbed/sapienzVirusShareLogs/$cate
+    OUTDIR=/home/hcai/testbed/sapienzCovAndroZooLogs/$cate
     mkdir -p $OUTDIR
 
 	k=1
@@ -67,7 +67,7 @@ profiling()
         adb -s $did push lib/motifcore.jar /system/framework
         adb -s $did push resources/motifcore /system/bin
 
-        adb -s $did logcat -v raw -s "hcai-intent-monitor" "hcai-cg-monitor" &>$OUTDIR/${fnapk##*/}.logcat &
+        adb -s $did logcat -v raw -s "hcai-cov-monitor" &>$OUTDIR/${fnapk##*/}.logcat &
         pidadb=$!
 
         timeout $tmv "python main_hcai.py $fnapk $did"
@@ -76,7 +76,7 @@ profiling()
 
         #rm -rf /tmp/android-hcai/*
 
-        /home/hcai/bin/apkuninstall $fnapk $did
+        timeout 30 "/home/hcai/bin/apkuninstall $fnapk $did"
         kill -9 $pidadb
 
         ((k=k+1))
