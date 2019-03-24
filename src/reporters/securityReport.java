@@ -760,9 +760,19 @@ public class securityReport implements Extension {
 			boolean isComponent = iccAPICom.getComponentType(sClass).compareTo("Unknown")!=0;
 			
 			/* traverse all methods of the class */
-			Iterator<SootMethod> meIt = sClass.getMethods().iterator();
-			while (meIt.hasNext()) {
-				SootMethod sMethod = (SootMethod) meIt.next();
+			//Iterator<SootMethod> meIt = sClass.getMethods().listIterator();
+			List<SootMethod> methods = new ArrayList<SootMethod>();
+			try {
+				for (SootMethod me : sClass.getMethods()) {
+					methods.add(me);
+				}
+			}
+			catch (Exception e) {
+				System.out.println("Something wrong here? for class " + sClass.getName());	
+			}
+			//while (meIt.hasNext()) {
+			//	SootMethod sMethod = (SootMethod) meIt.next();
+			for (SootMethod sMethod : methods) {	
 				String meId = sMethod.getSignature();
 				
 				totalMethods ++;

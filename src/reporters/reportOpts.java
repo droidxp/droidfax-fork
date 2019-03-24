@@ -23,8 +23,8 @@ public class reportOpts {
 	protected String callbackFile = null;
 	
 	// categorized sources and sinks
-	protected String catsrc = null;
-	protected String catsink = null;
+	public String catsrc = null;
+	public String catsink = null;
 	protected String catCallbackFile = null;
 
 	protected String apkdir = null;
