@@ -9,6 +9,10 @@ if (length(args)<1) {
 }
 
 fndata=args[1]
+bsort=0
+if (length(args)>=2) {
+    bsort = args[2]
+}
 tdata=read.table(file=fndata)
 
 scatdata=new.env()
@@ -67,9 +71,16 @@ points( meanalls, seq_along(meanalls), col='gold', pch=18, cex=0.5 )
 
 stdalls <- apply( t(alls), 2, sd )
 #for (k in 1:ncol(t(alls))) {
-for (k in order(meanalls)) {
-	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", snames[k], as.numeric(meanalls[k]), as.numeric(stdalls[k])))
+if (bsort==0) {
+    for (k in 1:ncol(t(alls))) {
+        #print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+        cat(sprintf("%s\t%.2f%%\t%.2f%%\n", snames[k], as.numeric(meanalls[k]), as.numeric(stdalls[k])))
+    }
+} else {
+    for (k in order(meanalls)) {
+        #print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+        cat(sprintf("%s\t%.2f%%\t%.2f%%\n", snames[k], as.numeric(meanalls[k]), as.numeric(stdalls[k])))
+    }
 }
 cat("\n")
 
@@ -95,10 +106,16 @@ meanalld <- (colMeans(t(alld)))
 points( meanalld, seq_along(meanalld), col='gold', pch=18, cex=0.5 )
 
 stdalld <- apply( t(alld), 2, sd )
-#for (k in 1:ncol(t(alld))) {
-for (k in order(meanalld)) {
-	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", dnames[k], as.numeric(meanalld[k]), as.numeric(stdalld[k])))
+if (bsort==0) {
+    for (k in 1:ncol(t(alld))) {
+        #print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+        cat(sprintf("%s\t%.2f%%\t%.2f%%\n", dnames[k], as.numeric(meanalld[k]), as.numeric(stdalld[k])))
+    }
+} else {
+    for (k in order(meanalld)) {
+        #print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+        cat(sprintf("%s\t%.2f%%\t%.2f%%\n", dnames[k], as.numeric(meanalld[k]), as.numeric(stdalld[k])))
+    }
 }
 cat("\n")
 
@@ -124,10 +141,16 @@ meanalldIns <- (colMeans(t(alldIns)))
 points( meanalldIns, seq_along(meanalldIns), col='gold', pch=18, cex=0.5 )
 
 stdalldIns <- apply( t(alldIns), 2, sd )
-#for (k in 1:ncol(t(alldIns))) {
-for (k in order(meanalldIns)) {
-	#print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
-	cat(sprintf("%s\t%.2f%%\t%.2f%%\n", dnamesIns[k], as.numeric(meanalldIns[k]), as.numeric(stdalldIns[k])))
+if (bsort==0) {
+    for (k in 1:ncol(t(alldIns))) {
+        #print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+        cat(sprintf("%s\t%.2f%%\t%.2f%%\n", dnamesIns[k], as.numeric(meanalldIns[k]), as.numeric(stdalldIns[k])))
+    }
+} else {
+    for (k in order(meanalldIns)) {
+        #print( paste(snames[k], meanalls[k], "% (", stdalls[k], "%)") )
+        cat(sprintf("%s\t%.2f%%\t%.2f%%\n", dnamesIns[k], as.numeric(meanalldIns[k]), as.numeric(stdalldIns[k])))
+    }
 }
 cat("\n")
 
