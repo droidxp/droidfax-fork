@@ -1,0 +1,17 @@
+Action
+Adventure
+Arcade
+Board
+Card
+Casino
+Casual
+Educational
+Music
+Puzzle
+Racing
+Role Playing
+Simulation
+Sports
+Strategy
+Trivia
+Word

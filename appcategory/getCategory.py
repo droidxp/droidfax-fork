@@ -70,6 +70,16 @@ for package in input_list:
         print "App not found: %s" %package[0]
 
 # write to csv file
-with open('results.csv', 'w') as fp:
-    a = csv.writer(fp, delimiter=",")
-    a.writerows(output_list)
+#with open('results.csv', 'w') as fp:
+#    a = csv.writer(fp, delimiter=",")
+#    a.writerows(output_list)
+
+fp = file('results.csv', 'w')
+for row in output_list:
+    try:
+        fp.write("%s,%s,%s\n" % (row[0], row[1], row[2]))
+    except:
+        pass
+fp.flush()
+fp.close()
+
