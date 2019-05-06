@@ -32,17 +32,19 @@ getPackage()
         echo $p1
         echo "collecting package names from ${p1##*/} ......"
         datatag=list.app_packages.${p1##*/}
-        >$datatag
-        for fnapk in $p1/*.apk;
-        do
-            tgtp=`~/bin/getpackage.sh $fnapk | awk '{print $2}'`
-            echo "$tgtp" >> $datatag
-        done
+        if [ ! -s $datatag ];then
+            >$datatag
+            for fnapk in $p1/*.apk;
+            do
+                tgtp=`~/bin/getpackage.sh $fnapk | awk '{print $2}'`
+                echo "$tgtp" >> $datatag
+            done
+        fi
 
         echo "collecting app categories from ${p1##*/} ......"
         python getCategory.py $datatag 
         restag=app.categories.${p1##*/}
-        mv result.csv $restag
+        cat results.csv >> $restag
     done
 }
 
