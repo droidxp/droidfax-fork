@@ -244,6 +244,14 @@ public class securityReport implements Extension {
 					String fnsink = dir + File.separator + "sink.txt";
 					PrintStream pssink = new PrintStream (new FileOutputStream(fnsink,true));
 					reportSinks (pssink);
+					
+					String fnmtd = dir + File.separator + "sensitiveMtd.csv";
+					PrintStream psmtd = new PrintStream (new FileOutputStream(fnmtd,true));
+					reportMethod (psmtd);
+					
+					
+					
+					
 				}
 
 				String fncb = dir + File.separator + "callback.txt";
@@ -513,7 +521,6 @@ public class securityReport implements Extension {
 		try {
 			for (AndroidMethod am : catsrcparser.parse()) {
 				allCatSrcs.put(am.getSignature(), am.getCategory());
-				
 			}
 			for (AndroidMethod am : catsinkparser.parse()) {
 				allCatSinks.put(am.getSignature(), am.getCategory());
@@ -939,6 +946,25 @@ public class securityReport implements Extension {
 					percentage(allReachableCatSinkInCalls.get(cat),allReachableSinkInCalls) );
 		}
 	}
+	
+	
+	public void reportMethod(PrintStream os) {
+		if (opts.debugOut) {
+			os.println("[SOURCE]");
+		}
+		
+		for (CATEGORY cat : traversedCatSrcs.keySet()) {
+			
+			if (traversedCatSrcs.get(cat).size()>0) {
+				os.println( cat + "\t" + traversedCatSrcs.get(cat).size() + "\t" + 
+						(coveredCatSrcs.containsKey(cat)?coveredCatSrcs.get(cat).size():0));
+				
+				os.println("S:"+traversedCatSrcs.get(cat));
+				os.println("D:"+coveredCatSrcs.containsKey(cat));
+			}
+		}
+	}
+	
 	
 	public void reportCallbacks(PrintStream os) {
 		/** report statistics for the current trace */
