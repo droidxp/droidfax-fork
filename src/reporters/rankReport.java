@@ -4,6 +4,7 @@
  * Date			Author      Changes
  * -------------------------------------------------------------------------------------------
  * 03/02/17		hcai		created; reporting ranks of different categories of callbacks and sources/sinks of each app
+ * 15/09/22		handrick	update;  inserted reportMethod which print all methods access by explore round
 */
 package reporters;
 
@@ -11,6 +12,7 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.Map;
 import dua.Forensics;
 
 import soot.*;
-
+import soot.jimple.infoflow.android.data.AndroidMethod;
 import soot.jimple.infoflow.android.data.AndroidMethod.CATEGORY;
 import utils.utils;
 import utils.iccAPICom.EVENTCAT;
@@ -144,6 +146,11 @@ public class rankReport extends securityReport { //implements Extension {
 					sortedallCatSrcInCalls.get(cat) + "\t" + 
 					sortedallEscapeCatSrcs.get(cat) + "\t" +
 					sortedallEscapeCatSrcInCalls.get(cat) );
+			
+			//if (traversedCatSrcs.get(cat).size()>0) {
+			//	os.println(traversedCatSrcs.get(cat));
+			//	os.println(coveredCatSrcs.containsKey(cat));
+			//}
 		}
 	}
 
@@ -175,7 +182,28 @@ public class rankReport extends securityReport { //implements Extension {
 		}
 	}
 	
+	public void reportMethod(PrintStream os) {
+		
+		if (opts.debugOut) {
+			os.println("[SOURCE]");
+		}
+		os.println("category,analysis,method"); 
+		for (CATEGORY cat : traversedCatSrcs.keySet()) {
+			
+			for (Iterator<String> iter = traversedCatSrcs.get(cat).iterator(); iter.hasNext(); ) {
+				
+				
+				os.println( cat+",STATIC,"+iter.next());
+							
+			}
+			for (Iterator<String> iter = coveredCatSrcs.get(cat).iterator(); iter.hasNext(); ) {
+				
+				os.println( cat+",DYNAMIC,"+iter.next()); 
 
+			}
+		}
+	}
+	
 	public void reportLifecycleMethods(PrintStream os) {
 		/** report statistics for the current trace */
 		if (opts.debugOut) {
