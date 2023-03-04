@@ -157,6 +157,10 @@ public class sceneInstr implements Extension {
 			new eventTracker.sceneInstr().run();
 		}
 
+		if (opts.monitorApiCalls()) {
+			new apiTracker.sceneInstr().run();
+		}
+
 		if (opts.dumpJimple()) {
 			String fnJimple = soot.options.Options.v().output_dir()+File.separator+utils.getAPKName()+"_JimpleInstrumented.out";
 			//String fnJimple = Util.getCreateBaseOutPath() + "JimpleInstrumented.out";

@@ -1,13 +1,4 @@
-/**
- * File: src/dynCG/Options.java
- * -------------------------------------------------------------------------------------------
- * Date			Author      Changes
- * -------------------------------------------------------------------------------------------
- * 10/19/15		hcai		created; for command-line argument processing for DynCG Instrumenter
- * 02/04/17		hcai		added option for monitoring events (triggers of event-handling callbacks)
- *
-*/
-package dynCG;
+package apiTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +16,8 @@ public class Options {
 	protected boolean monitorICC = true;
 	protected boolean monitorAllCalls = true;
 	protected boolean monitorEvents = false;
-	protected boolean monitorApiCalls = true;
+
+	public String catsink = null;
 
 	public boolean debugOut() { return debugOut; }
 	public boolean dumpJimple() { return dumpJimple; }
@@ -39,7 +31,6 @@ public class Options {
 	public boolean monitorICC() { return monitorICC; }
 	protected boolean monitorAllCalls() { return monitorAllCalls; }
 	protected boolean monitorEvents() { return monitorEvents; }
-	protected boolean monitorApiCalls() { return monitorApiCalls; }
 	
 	public final static int OPTION_NUM = 7;
 	
@@ -83,6 +74,10 @@ public class Options {
 			else if (arg.equals("-nophantom")) {
 				allowPhantom = false;
 			}
+			else if (arg.equals("-catsink")) {
+				catsink = args[i+1];
+				i++;
+			}
 			else {
 				argsFiltered.add(arg);
 			}
@@ -96,6 +91,3 @@ public class Options {
 		return (String[]) argsFiltered.toArray(arrArgsFilt);
 	}
 }
-
-/* vim :set ts=4 tw=4 tws=4 */
-
