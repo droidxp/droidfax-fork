@@ -25,7 +25,6 @@ public class Options {
 	protected boolean monitorICC = true;
 	protected boolean monitorAllCalls = true;
 	protected boolean monitorEvents = false;
-	protected boolean monitorApiCalls = true;
 
 	public boolean debugOut() { return debugOut; }
 	public boolean dumpJimple() { return dumpJimple; }
@@ -39,7 +38,6 @@ public class Options {
 	public boolean monitorICC() { return monitorICC; }
 	protected boolean monitorAllCalls() { return monitorAllCalls; }
 	protected boolean monitorEvents() { return monitorEvents; }
-	protected boolean monitorApiCalls() { return monitorApiCalls; }
 	
 	public final static int OPTION_NUM = 7;
 	

@@ -6,7 +6,7 @@ indir=$1
 linkage=$2
 tmv=${3:-"3600"}
 srcdir=/home/hcai/testbed/cg.instrumented/$indir/pairs/${linkage}
-OUTDIR=/home/hcai/testbed/pairTrace_$linkage
+OUTDIR=/home/hcai/testbed/sdkApiTrace_$linkage
 mkdir -p $OUTDIR
 
 timeout() {
@@ -32,19 +32,19 @@ do
 
 	echo "================ RUN APP PAIR $i ==========================="
 	# echo "Starting android emulator ......"
-	# /home/hcai/testbed/setupEmu.sh Nexus-One-10 2>/dev/null 1>&2
+	/home/hcai/testbed/setupEmu.sh Nexus-One-10 2>/dev/null 1>&2
 
-	# /home/hcai/testbed/singlePairInstall.sh $indir $linkage $i
-    apkinstall $srcdir/$i/s.apk
+	/home/hcai/testbed/singlePairInstall.sh $indir $linkage $i
+  #apkinstall $srcdir/$i/s.apk
 	adb logcat -v raw -s "apicall-monitor" &>$OUTDIR/${i}.logcat &
 
 	timeout $tmv "/home/hcai/testbed/runPair.sh $indir $linkage $i >$OUTDIR/${i}.monkey"
 
-	# /home/hcai/testbed/singlePairUninstall.sh $indir $linkage $i
-    apkuninstall $srcdir/$i/s.apk
+	/home/hcai/testbed/singlePairUninstall.sh $indir $linkage $i
+  #apkuninstall $srcdir/$i/s.apk
 
 	killall -9 adb
-	# killall -9 adb
+	killall -9 adb
 done
 
 exit 0
