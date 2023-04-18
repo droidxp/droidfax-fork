@@ -38,7 +38,6 @@ import soot.toolkits.graph.Block;
 import soot.toolkits.graph.BlockGraph;
 import soot.toolkits.graph.ExceptionalBlockGraph;
 import soot.util.*;
-import soot.javaToJimple.LocalGenerator;
 //import soot.jimple.toolkits.annotation.*;
 import utils.*;
 
@@ -92,11 +91,11 @@ public class sceneInstr implements Extension {
 			eventTracker.sceneInstr.opts.instr3rdparty = opts.instr3rdparty();
 		}
 
-        if (opts.monitorApiCalls()) {
-            Scene.v().addBasicClass("apiTracker.Monitor");
-            //args = apiTracker.sceneInstr.preProcessArgs(apiTracker.sceneInstr.opts, args);
-            apiTracker.sceneInstr.opts.catsink = opts.catsink;
-        }
+		if (opts.monitorApiCalls()) {
+				Scene.v().addBasicClass("apiTracker.Monitor");
+				//args = apiTracker.sceneInstr.preProcessArgs(apiTracker.sceneInstr.opts, args);
+				apiTracker.sceneInstr.opts.catsink = opts.catsink;
+		}
 		
 		Forensics.registerExtension(icgins);
 		
@@ -133,9 +132,9 @@ public class sceneInstr implements Extension {
 			Scene.v().getSootClass("eventTracker.Monitor").setApplicationClass();
 		}
 
-        if (opts.monitorApiCalls()) {
-            Scene.v().getSootClass("apiTracker.Monitor").setApplicationClass();
-        }
+		if (opts.monitorApiCalls()) {
+				Scene.v().getSootClass("apiTracker.Monitor").setApplicationClass();
+		}
 		
 		mInitialize = clsMonitor.getMethodByName("initialize");
 		mEnter = clsMonitor.getMethodByName("enter");
@@ -168,9 +167,9 @@ public class sceneInstr implements Extension {
 			new eventTracker.sceneInstr().run();
 		}
 
-        if (opts.monitorApiCalls()) {
-            new apiTracker.sceneInstr().run();
-        }
+		if (opts.monitorApiCalls()) {
+				new apiTracker.sceneInstr().run();
+		}
 
 		if (opts.dumpJimple()) {
 			String fnJimple = soot.options.Options.v().output_dir()+File.separator+utils.getAPKName()+"_JimpleInstrumented.out";
@@ -261,7 +260,6 @@ public class sceneInstr implements Extension {
 				
 				//Body body = sMethod.getActiveBody();
 				Body body = sMethod.retrieveActiveBody();
-				LocalGenerator bodyGenerator = new LocalGenerator(body);
 				
 				/* the ID of a method to be used for identifying and indexing a method in the event maps of EAS */
 				//String meId = sClass.getName() +	"::" + sMethod.getName();
@@ -454,19 +452,11 @@ public class sceneInstr implements Extension {
 						Stmt sEnterLibCall = Jimple.v().newInvokeStmt( Jimple.v().newStaticInvokeExpr(
 								mLibCall.makeRef(), enterlibcallArgs ));
 						retinProbes.add(sEnterLibCall);
-						//if (opts.debugOut()) {
+						if (opts.debugOut()) {
 							System.out.println("monitor libCall instrumented at library call site " +
 									cs + " in method: " + meId);
-						//}
+						}
 						InstrumManager.v().insertAfter(pchn, retinProbes, cs.getLoc().getStmt());
-						
-						// ============= API TRACKER ==============================
-
-						
-
-						// ============= END OF API TRACKER =======================
-
-
 						// only care about application calls
 						continue;
 					}

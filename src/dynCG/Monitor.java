@@ -171,27 +171,6 @@ public class Monitor {
 			e.printStackTrace();
 		}
 	}
-
-	private static boolean apiCallActive = false;
-
-    	public synchronized static void apiCall (String methodSignature, Object... params) {
-		if (apiCallActive) return;
-		apiCallActive = true;
-		try { apiCall_impl(methodSignature, params); }
-		finally { apiCallActive = false; }
-	}
-	private synchronized static void apiCall_impl(String methodSignature, Object... params) {
-		try {
-			String args = "";
-			for (Object param : params) {
-				args += param + ", ";
-			}
-
-			android.util.Log.i("apicall-monitor", "[API-TRACK]: ((" + methodSignature + ")) => (" + args + ")");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public synchronized static void returnInto(String methodname, String calleeName, java.lang.reflect.Method refme){
 		if (active) return;
