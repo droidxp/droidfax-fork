@@ -20,11 +20,15 @@ public class Monitor {
                 if (param == null) {
                     args += "null" + ", ";
                 } else {
-                    args += param.toString() + ", ";
+                    args += "\"" + param.toString().replaceAll("\"", "\\\\\"") + "\", ";
                 }
 			}
 
-			android.util.Log.i("apicall-monitor", "[API-TRACK]: ((" + methodSignature + ")) => (" + args + ")");
+            if (args.length() >= 2) {
+                args = args.substring(0, args.length() - 2);
+            }
+
+			android.util.Log.i("apicall-monitor", "[API-TRACK]: " + methodSignature + " => " + args);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

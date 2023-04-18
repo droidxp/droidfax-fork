@@ -47,7 +47,7 @@ public class sceneInstr implements Extension {
     protected SootClass clsMonitor = null;
 	protected SootMethod mApiTracker = null;
 
-    protected static Options opts = new Options();
+    public static Options opts = new Options();
 
     protected static Set<CATEGORY> allcats = new HashSet<CATEGORY>();
 
@@ -84,7 +84,7 @@ public class sceneInstr implements Extension {
 		Forensics.main(args);
 	}
 
-    protected static String[] preProcessArgs(Options _opts, String[] args) {
+    public static String[] preProcessArgs(Options _opts, String[] args) {
 		opts = _opts;
 		args = opts.process(args);
 		
@@ -152,8 +152,16 @@ public class sceneInstr implements Extension {
                 continue;
             }
 
-            if (sClass.getName().contains("apiTracker.Monitor")) {
+            if (sClass.getName().equals("apiTracker.Monitor") 
+                || sClass.getName().equals("dynCG.Monitor")
+                || sClass.getName().equals("utils.MethodEventComparator")
+                || sClass.getName().equals("utils.logicClock")
+                || sClass.getName().equals("intentTracker.Monitor")
+                || sClass.getName().equals("eventTracker.Monitor")
+                || sClass.getName().equals("covTracker.covMonitor")
+            ) {
                 // ignore my own monitor method
+                // also ignore other monitors
                 continue;
             }
 
@@ -284,7 +292,7 @@ public class sceneInstr implements Extension {
 
                     System.out.println("[API-TRACKER] Method call: " + calleename);
 
-                    body.validate();
+                    //body.validate();
 
                     totalApiCalls++;
                 }
