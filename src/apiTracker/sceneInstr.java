@@ -44,25 +44,25 @@ import soot.jimple.infoflow.android.data.parsers.CategorizedAndroidSourceSinkPar
 
 public class sceneInstr implements Extension {
 
-    protected SootClass clsMonitor = null;
+	protected SootClass clsMonitor = null;
 	protected SootMethod mApiTracker = null;
 
-    public static Options opts = new Options();
+	public static Options opts = new Options();
 
-    protected static Set<CATEGORY> allcats = new HashSet<CATEGORY>();
+	protected static Set<CATEGORY> allcats = new HashSet<CATEGORY>();
 
-    public final static String AndroidClassPattern = "(android|com\\.example\\.android|com\\.google|com\\.android|dalvik)\\.(.)+"; 
+	public final static String AndroidClassPattern = "(android|com\\.example\\.android|com\\.google|com\\.android|dalvik)\\.(.)+"; 
 	public final static String OtherSDKClassPattern = "(gov\\.nist|java|javax|junit|libcore|net\\.oauth|org\\.apache|org\\.ccil|org\\.javia|" +
 			"org\\.jivesoftware|org\\.json|org\\.w3c|org\\.xml|sun|com\\.adobe|com\\.svox|jp\\.co\\.omronsoft|org\\.kxml2|org\\.xmlpull)\\.(.)+";
 
-    protected static int totalApiCalls = 0;
+	protected static int totalApiCalls = 0;
 
-    protected static CategorizedAndroidSourceSinkParser catsinkparser;
+	protected static CategorizedAndroidSourceSinkParser catsinkparser;
 
-    Map<String, CATEGORY> catsMap = new HashMap<String,CATEGORY>();
-    
-    public static void main(String args[]){
-        args = preProcessArgs(opts, args);
+	Map<String, CATEGORY> catsMap = new HashMap<String,CATEGORY>();
+	
+	public static void main(String args[]){
+		args = preProcessArgs(opts, args);
 		sceneInstr eventinstr = new sceneInstr();
 		// examine catch blocks
 		dua.Options.ignoreCatchBlocks = false;
@@ -84,7 +84,7 @@ public class sceneInstr implements Extension {
 		Forensics.main(args);
 	}
 
-    public static String[] preProcessArgs(Options _opts, String[] args) {
+	public static String[] preProcessArgs(Options _opts, String[] args) {
 		opts = _opts;
 		args = opts.process(args);
 		
@@ -99,34 +99,34 @@ public class sceneInstr implements Extension {
 		return argsForDuaF;
 	}
 
-    protected void init() {
-        clsMonitor = Scene.v().getSootClass("apiTracker.Monitor");
-        
-        /** add our runtime monitor to application class so that it can be packed together 
-         * with the instrumented code into the resulting APK package
-         */
-        clsMonitor.setApplicationClass();
-        mApiTracker = clsMonitor.getMethodByName("apiCall");
+	protected void init() {
+		clsMonitor = Scene.v().getSootClass("apiTracker.Monitor");
+		
+		/** add our runtime monitor to application class so that it can be packed together 
+		 * with the instrumented code into the resulting APK package
+		 */
+		clsMonitor.setApplicationClass();
+		mApiTracker = clsMonitor.getMethodByName("apiCall");
 
-        // get android api calls
-        List<CATEGORY> ignoreCats = Arrays.asList();
-        List<CATEGORY> filteredCategories = Arrays.asList(CATEGORY.ALL.getDeclaringClass().getEnumConstants())
-            .stream().filter(item -> !ignoreCats.contains(item)).collect(Collectors.toList());
-    
+		// get android api calls
+		List<CATEGORY> ignoreCats = Arrays.asList();
+		List<CATEGORY> filteredCategories = Arrays.asList(CATEGORY.ALL.getDeclaringClass().getEnumConstants())
+			.stream().filter(item -> !ignoreCats.contains(item)).collect(Collectors.toList());
+	
 		allcats.addAll(filteredCategories);
-        catsinkparser = 
+		catsinkparser = 
 			new CategorizedAndroidSourceSinkParser(allcats, opts.catsink, true, false);
 
-        try {
-            for (AndroidMethod am : catsinkparser.parse()) {
-                catsMap.put(am.getSignature(), am.getCategory());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		try {
+			for (AndroidMethod am : catsinkparser.parse()) {
+				catsMap.put(am.getSignature(), am.getCategory());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-        // System.out.println("[API-TRACKER] AllCats: " + allcats.toString());
-        // System.out.println("[API-TRACKER] AllCatSrcs: " + allCatSrcs.toString());
+		// System.out.println("[API-TRACKER] AllCats: " + allcats.toString());
+		// System.out.println("[API-TRACKER] AllCatSrcs: " + allCatSrcs.toString());
 	}
 	
 	public void run() {
@@ -134,170 +134,170 @@ public class sceneInstr implements Extension {
 		
 		init();
 
-        instrument();
+		instrument();
 
-        System.out.println("[API-TRACKER] Total SDK API Calls: " + String.valueOf(totalApiCalls));
+		System.out.println("[API-TRACKER] Total SDK API Calls: " + String.valueOf(totalApiCalls));
 	}
 
-    public void instrument() {
-        Iterator<SootClass> clsIt = Scene.v().getClasses().snapshotIterator();
-        while (clsIt.hasNext()) {
-            SootClass sClass = (SootClass) clsIt.next();
+	public void instrument() {
+		Iterator<SootClass> clsIt = Scene.v().getClasses().snapshotIterator();
+		while (clsIt.hasNext()) {
+			SootClass sClass = (SootClass) clsIt.next();
 
-            if ( sClass.isPhantom() ) {	continue; }
+			if ( sClass.isPhantom() ) {	continue; }
 
-            if (sClass.getName().matches(AndroidClassPattern) || sClass.getName().matches(OtherSDKClassPattern)) {
-        		// just modify methods of application classes
-	            //System.out.println("[API-TRACKER] Refused class name: " + sClass.getName());
-                continue;
-            }
+			if (sClass.getName().matches(AndroidClassPattern) || sClass.getName().matches(OtherSDKClassPattern)) {
+				// just modify methods of application classes
+				//System.out.println("[API-TRACKER] Refused class name: " + sClass.getName());
+				continue;
+			}
 
-            if (sClass.getName().equals("apiTracker.Monitor") 
-                || sClass.getName().equals("dynCG.Monitor")
-                || sClass.getName().equals("utils.MethodEventComparator")
-                || sClass.getName().equals("utils.logicClock")
-                || sClass.getName().equals("intentTracker.Monitor")
-                || sClass.getName().equals("eventTracker.Monitor")
-                || sClass.getName().equals("covTracker.covMonitor")
-            ) {
-                // ignore my own monitor method
-                // also ignore other monitors
-                continue;
-            }
+			if (sClass.getName().equals("apiTracker.Monitor") 
+				|| sClass.getName().equals("dynCG.Monitor")
+				|| sClass.getName().equals("utils.MethodEventComparator")
+				|| sClass.getName().equals("utils.logicClock")
+				|| sClass.getName().equals("intentTracker.Monitor")
+				|| sClass.getName().equals("eventTracker.Monitor")
+				|| sClass.getName().equals("covTracker.covMonitor")
+			) {
+				// ignore my own monitor method
+				// also ignore other monitors
+				continue;
+			}
 
-	        System.out.println("[API-TRACKER] Accepted class name: " + sClass.getName());
+			System.out.println("[API-TRACKER] Accepted class name: " + sClass.getName());
 
-            // get all class methods
-            List<SootMethod> methods = new ArrayList<SootMethod>();
-            try {
-            	for (SootMethod me : sClass.getMethods()) {
-            		methods.add(me);
-            	}
-            }
-            catch (Exception e) {
-            	System.out.println("Something wrong here? for class " + sClass.getName());	
-            }
+			// get all class methods
+			List<SootMethod> methods = new ArrayList<SootMethod>();
+			try {
+				for (SootMethod me : sClass.getMethods()) {
+					methods.add(me);
+				}
+			}
+			catch (Exception e) {
+				System.out.println("Something wrong here? for class " + sClass.getName());	
+			}
 
-            // traverse methods
-            for (SootMethod sMethod : methods) {
-                if ( !sMethod.isConcrete() ) {
-                    // skip abstract methods and phantom methods, and native methods as well
-                    continue; 
-                }
+			// traverse methods
+			for (SootMethod sMethod : methods) {
+				if ( !sMethod.isConcrete() ) {
+					// skip abstract methods and phantom methods, and native methods as well
+					continue; 
+				}
 
-                Body body = sMethod.retrieveActiveBody();
-        		PatchingChain<Unit> pchn = body.getUnits();
+				Body body = sMethod.retrieveActiveBody();
+				PatchingChain<Unit> pchn = body.getUnits();
 				
-		        Iterator<Unit> itchain = pchn.snapshotIterator();
+				Iterator<Unit> itchain = pchn.snapshotIterator();
 
-                LocalGenerator bodyGenerator = new LocalGenerator(body);
+				LocalGenerator bodyGenerator = new LocalGenerator(body);
 
-                while (itchain.hasNext()) {
-                    Unit curr = itchain.next();
-                    Stmt s = (Stmt) curr;
-                    if (!s.containsInvokeExpr()) {
-                    	continue;
-                    }
-                    String calleename = s.getInvokeExpr().getMethod().getSignature();
+				while (itchain.hasNext()) {
+					Unit curr = itchain.next();
+					Stmt s = (Stmt) curr;
+					if (!s.containsInvokeExpr()) {
+						continue;
+					}
+					String calleename = s.getInvokeExpr().getMethod().getSignature();
 
-		            if (s.getInvokeExpr().getMethod().getParameterCount() <= 0) {
-			            // ignore method calls that have 0 args
-			            continue;
-		            }
+					if (s.getInvokeExpr().getMethod().getParameterCount() <= 0) {
+						// ignore method calls that have 0 args
+						continue;
+					}
 
 
-                    if (!catsMap.keySet().contains(calleename)) {
-			            // if not sensitive API call, ignore
-			            continue;
-		            }
+					if (!catsMap.keySet().contains(calleename)) {
+						// if not sensitive API call, ignore
+						continue;
+					}
 
-                    List<Stmt> methodCalls = new ArrayList<Stmt>();
+					List<Stmt> methodCalls = new ArrayList<Stmt>();
 
-                    Value methodSignature = StringConstant.v(calleename);
+					Value methodSignature = StringConstant.v(calleename);
 
-                    int argCount = s.getInvokeExpr().getArgCount();
+					int argCount = s.getInvokeExpr().getArgCount();
 
-                    // create empty array of objects
-                    Local arrLocal = bodyGenerator.generateLocal(ArrayType.v(RefType.v("java.lang.Object"), 1));
-                    NewArrayExpr arrExpr = Jimple.v().newNewArrayExpr(RefType.v("java.lang.Object"), IntConstant.v(argCount));
-                    AssignStmt assignArrToLocal = Jimple.v().newAssignStmt(arrLocal, arrExpr);
-                    methodCalls.add(assignArrToLocal);
+					// create empty array of objects
+					Local arrLocal = bodyGenerator.generateLocal(ArrayType.v(RefType.v("java.lang.Object"), 1));
+					NewArrayExpr arrExpr = Jimple.v().newNewArrayExpr(RefType.v("java.lang.Object"), IntConstant.v(argCount));
+					AssignStmt assignArrToLocal = Jimple.v().newAssignStmt(arrLocal, arrExpr);
+					methodCalls.add(assignArrToLocal);
 
-                    boolean valid = true;
+					boolean valid = true;
 
-                    for (int i=0;i<argCount;i++) {
-                        ArrayRef idxRef = Jimple.v().newArrayRef(arrLocal, IntConstant.v(i));
-                        Value arg = s.getInvokeExpr().getArg(i);
+					for (int i=0;i<argCount;i++) {
+						ArrayRef idxRef = Jimple.v().newArrayRef(arrLocal, IntConstant.v(i));
+						Value arg = s.getInvokeExpr().getArg(i);
 
-                        if (arg.getType() instanceof NullType) {
-                            // if null, sets null
-                            AssignStmt assign = Jimple.v().newAssignStmt(idxRef, NullConstant.v());
-                            methodCalls.add(assign);
-                        } else if (arg.getType() instanceof PrimType) {
-                            // if its a primitive type, need to have a boxed class to pass it as Object param
-                            RefType boxedType = ((PrimType) arg.getType()).boxedType();
-                            Local boxedTypeLocal = bodyGenerator.generateLocal(boxedType);
-                            
-                            // create list with primitive type to search for the valueOf method
-                            List<Type> primTypeList = new ArrayList<>();
-                            primTypeList.add(arg.getType());
+						if (arg.getType() instanceof NullType) {
+							// if null, sets null
+							AssignStmt assign = Jimple.v().newAssignStmt(idxRef, NullConstant.v());
+							methodCalls.add(assign);
+						} else if (arg.getType() instanceof PrimType) {
+							// if its a primitive type, need to have a boxed class to pass it as Object param
+							RefType boxedType = ((PrimType) arg.getType()).boxedType();
+							Local boxedTypeLocal = bodyGenerator.generateLocal(boxedType);
+							
+							// create list with primitive type to search for the valueOf method
+							List<Type> primTypeList = new ArrayList<>();
+							primTypeList.add(arg.getType());
 
-                            if (!boxedType.getSootClass().declaresMethod("valueOf", primTypeList)) {
-                                // if we cant convert the primitive to a boxed value, we cant pass it to our method
-                                valid = false;
-                                break;
-                            }
+							if (!boxedType.getSootClass().declaresMethod("valueOf", primTypeList)) {
+								// if we cant convert the primitive to a boxed value, we cant pass it to our method
+								valid = false;
+								break;
+							}
 
-                            try {
-                                // calls valueOf for this boxed class
-                                AssignStmt callBoxedValueOf = Jimple.v().newAssignStmt( boxedTypeLocal, 
-                                    Jimple.v().newStaticInvokeExpr(boxedType.getSootClass().getMethod("valueOf", primTypeList).makeRef(), arg) );
-                                AssignStmt assign = Jimple.v().newAssignStmt(idxRef, boxedTypeLocal);
-                                methodCalls.add(callBoxedValueOf);
-                                methodCalls.add(assign);
-                            
-                                System.out.println("[API-TRACKER] [BOXING] Boxed primitive type in method " + calleename 
-                                    + " (" + i + "): " + arg.getType() + " => " + boxedType);
-                            } catch (Exception e) {
-                                // guarantee that we wont fall on AmbiguousMethodException (not supposed to)
-                                System.err.println("[API-TRACKER] [BOXING] There was an error boxing a parameter: " + e.getMessage());
-                                valid = false;
-                                e.printStackTrace();
-                                break;
-                            }
-                        } else if (arg.getType() instanceof ArrayType) {
-                            // if its an ArrayType, it's fine.
-                            System.out.println("[API-TRACKER] [WARN] ArrayType: " + ((ArrayType) arg.getType()).baseType);
-                            AssignStmt assign = Jimple.v().newAssignStmt(idxRef, arg);
-                            methodCalls.add(assign);
-                        } else {
-                            // if its a RefType, it's fine.
-                            AssignStmt assign = Jimple.v().newAssignStmt(idxRef, arg);
-                            methodCalls.add(assign);
-                        }
-                    }
+							try {
+								// calls valueOf for this boxed class
+								AssignStmt callBoxedValueOf = Jimple.v().newAssignStmt( boxedTypeLocal, 
+									Jimple.v().newStaticInvokeExpr(boxedType.getSootClass().getMethod("valueOf", primTypeList).makeRef(), arg) );
+								AssignStmt assign = Jimple.v().newAssignStmt(idxRef, boxedTypeLocal);
+								methodCalls.add(callBoxedValueOf);
+								methodCalls.add(assign);
+							
+								System.out.println("[API-TRACKER] [BOXING] Boxed primitive type in method " + calleename 
+									+ " (" + i + "): " + arg.getType() + " => " + boxedType);
+							} catch (Exception e) {
+								// guarantee that we wont fall on AmbiguousMethodException (not supposed to)
+								System.err.println("[API-TRACKER] [BOXING] There was an error boxing a parameter: " + e.getMessage());
+								valid = false;
+								e.printStackTrace();
+								break;
+							}
+						} else if (arg.getType() instanceof ArrayType) {
+							// if its an ArrayType, it's fine.
+							System.out.println("[API-TRACKER] [WARN] ArrayType: " + ((ArrayType) arg.getType()).baseType);
+							AssignStmt assign = Jimple.v().newAssignStmt(idxRef, arg);
+							methodCalls.add(assign);
+						} else {
+							// if its a RefType, it's fine.
+							AssignStmt assign = Jimple.v().newAssignStmt(idxRef, arg);
+							methodCalls.add(assign);
+						}
+					}
 
-                    if (!valid) continue;
+					if (!valid) continue;
 
-                    // create list of params to be passed to the Monitor
-                    List<Value> trackArgs = new ArrayList<>();
-                    trackArgs.add(methodSignature);
-                    trackArgs.add(arrLocal);
-                    
-                    // adds the Monitor.apiCall call before the actual method call
-                    Stmt callTracker = Jimple.v().newInvokeStmt( Jimple.v().newStaticInvokeExpr(mApiTracker.makeRef(), trackArgs) );
-                    methodCalls.add(callTracker);
-                    
-                    InstrumManager.v().insertBeforeNoRedirect(pchn, methodCalls, s);
+					// create list of params to be passed to the Monitor
+					List<Value> trackArgs = new ArrayList<>();
+					trackArgs.add(methodSignature);
+					trackArgs.add(arrLocal);
+					
+					// adds the Monitor.apiCall call before the actual method call
+					Stmt callTracker = Jimple.v().newInvokeStmt( Jimple.v().newStaticInvokeExpr(mApiTracker.makeRef(), trackArgs) );
+					methodCalls.add(callTracker);
+					
+					InstrumManager.v().insertBeforeNoRedirect(pchn, methodCalls, s);
 
-                    System.out.println("[API-TRACKER] Method call: " + calleename);
+					System.out.println("[API-TRACKER] Method call: " + calleename);
 
-                    //body.validate();
+					//body.validate();
 
-                    totalApiCalls++;
-                }
-            }
-        }
-    }
+					totalApiCalls++;
+				}
+			}
+		}
+	}
 
 }

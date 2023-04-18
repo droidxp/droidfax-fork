@@ -2,9 +2,9 @@ package apiTracker;
 
 public class Monitor {
 
-    //private static boolean active = false;
+	//private static boolean active = false;
 
-    public static void apiCall (String methodSignature, Object[] params) {
+	public static void apiCall (String methodSignature, Object[] params) {
 		//if (active) return;
 		//active = true;
 		//try { 
@@ -33,5 +33,5 @@ public class Monitor {
 			e.printStackTrace();
 		}
 	}
-    
+		
 }

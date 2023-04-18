@@ -25,7 +25,7 @@ public class Options {
 	protected boolean monitorICC = true;
 	protected boolean monitorAllCalls = true;
 	protected boolean monitorEvents = false;
-  protected boolean monitorApiCalls = false;
+	protected boolean monitorApiCalls = false;
 
 	public String catsink = null;
 
@@ -41,7 +41,7 @@ public class Options {
 	public boolean monitorICC() { return monitorICC; }
 	protected boolean monitorAllCalls() { return monitorAllCalls; }
 	protected boolean monitorEvents() { return monitorEvents; }
-  protected boolean monitorApiCalls() { return monitorApiCalls; }
+	protected boolean monitorApiCalls() { return monitorApiCalls; }
 	
 	public final static int OPTION_NUM = 7;
 	
