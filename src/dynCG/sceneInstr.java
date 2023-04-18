@@ -90,6 +90,12 @@ public class sceneInstr implements Extension {
 			eventTracker.sceneInstr.opts.debugOut = opts.dumpJimple();
 			eventTracker.sceneInstr.opts.instr3rdparty = opts.instr3rdparty();
 		}
+
+		if (opts.monitorApiCalls()) {
+				Scene.v().addBasicClass("apiTracker.Monitor");
+				//args = apiTracker.sceneInstr.preProcessArgs(apiTracker.sceneInstr.opts, args);
+				apiTracker.sceneInstr.opts.catsink = opts.catsink;
+		}
 		
 		Forensics.registerExtension(icgins);
 		
@@ -125,6 +131,10 @@ public class sceneInstr implements Extension {
 		if (opts.monitorEvents()) {
 			Scene.v().getSootClass("eventTracker.Monitor").setApplicationClass();
 		}
+
+		if (opts.monitorApiCalls()) {
+				Scene.v().getSootClass("apiTracker.Monitor").setApplicationClass();
+		}
 		
 		mInitialize = clsMonitor.getMethodByName("initialize");
 		mEnter = clsMonitor.getMethodByName("enter");
@@ -155,6 +165,10 @@ public class sceneInstr implements Extension {
 		
 		if (opts.monitorEvents()) {
 			new eventTracker.sceneInstr().run();
+		}
+
+		if (opts.monitorApiCalls()) {
+				new apiTracker.sceneInstr().run();
 		}
 
 		if (opts.dumpJimple()) {
